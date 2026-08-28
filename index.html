@@ -1,0 +1,1614 @@
+<title>Med Calc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap">
+
+<style>
+/* ── Tokens ── */
+:root {
+  --bg:        #0D1A28;
+  --surface:   #142030;
+  --surface2:  #1B2C42;
+  --border:    #243550;
+  --accent:    #28C4A8;
+  --accent-b:  #1A9782;
+  --accent-g:  rgba(40,196,168,.16);
+  --warn:      #F5A540;
+  --warn-g:    rgba(245,165,64,.12);
+  --text:      #DDE4F2;
+  --muted:     #6B7FA0;
+  --dim:       #3A4F6A;
+  --mono: "DM Mono", monospace;
+  --sans: "DM Sans", system-ui, sans-serif;
+  --r: 12px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg:      #EDF1F7;
+    --surface: #FFFFFF;
+    --surface2:#E4EAF4;
+    --border:  #C6D0E4;
+    --accent:  #169880;
+    --accent-b:#0F7060;
+    --accent-g:rgba(22,152,128,.10);
+    --warn:    #C47B10;
+    --warn-g:  rgba(196,123,16,.10);
+    --text:    #0D1A28;
+    --muted:   #4A5F80;
+    --dim:     #9AAEC8;
+  }
+}
+:root[data-theme="light"] {
+  --bg:      #EDF1F7;
+  --surface: #FFFFFF;
+  --surface2:#E4EAF4;
+  --border:  #C6D0E4;
+  --accent:  #169880;
+  --accent-b:#0F7060;
+  --accent-g:rgba(22,152,128,.10);
+  --warn:    #C47B10;
+  --warn-g:  rgba(196,123,16,.10);
+  --text:    #0D1A28;
+  --muted:   #4A5F80;
+  --dim:     #9AAEC8;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px 60px;
+}
+
+/* ── Header ── */
+.app-header {
+  text-align: center;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 500px;
+}
+.eyebrow {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.app-header h1 {
+  font-size: clamp(20px,5vw,26px);
+  font-weight: 300;
+  line-height: 1.2;
+}
+.app-header h1 strong { font-weight: 600; }
+
+/* ── Tabs ── */
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 5px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 500px;
+  gap: 4px;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  border-radius: 10px;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 8px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.tab-btn .tab-icon { font-size: 18px; line-height: 1; }
+.tab-btn.active {
+  background: var(--accent-g);
+  color: var(--accent);
+  outline: 1px solid var(--accent-b);
+}
+
+/* ── Card ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px 22px 18px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 36px rgba(0,0,0,.26);
+}
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ── Field ── */
+.field { margin-bottom: 16px; }
+.fl {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.badge-w {
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--warn-g);
+  color: var(--warn);
+  border: 1px solid color-mix(in srgb, var(--warn) 30%, transparent);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+/* ── Inputs ── */
+.input-base {
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+}
+.input-base::-webkit-inner-spin-button,
+.input-base::-webkit-outer-spin-button { -webkit-appearance: none; }
+.input-base:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-g);
+}
+.input-base.computed {
+  border-color: var(--accent-b);
+  background: color-mix(in srgb, var(--surface2) 80%, var(--accent) 20%);
+  color: var(--accent);
+}
+
+/* Peso highlight */
+.peso-wrap {
+  display: flex;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color .15s;
+}
+.peso-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-g); }
+#peso {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 26px;
+  font-weight: 500;
+  padding: 12px 14px;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+  min-width: 0;
+}
+#peso::-webkit-inner-spin-button,#peso::-webkit-outer-spin-button{-webkit-appearance:none}
+.peso-kg {
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* Select */
+.sel-wrap { position: relative; }
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 11px 38px 11px 13px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color .15s;
+}
+select:focus { border-color: var(--accent); }
+.sel-arr {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--muted);
+}
+
+/* ── Slider ── */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+input[type=range] {
+  flex: 1;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.slider-val {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  min-width: 104px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Toggle buttons ── */
+.toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.tog-btn {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: all .13s;
+}
+.tog-btn.active {
+  background: var(--accent-g);
+  border-color: var(--accent-b);
+  color: var(--accent);
+}
+
+/* ── Strip (fator / info) ── */
+.strip {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.strip-label { color: var(--muted); }
+.strip-val {
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--accent);
+  text-align: right;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Resultado grid 3 células ── */
+.res-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.res-cell {
+  background: linear-gradient(145deg, var(--accent-g), transparent 80%);
+  border: 1px solid var(--accent-b);
+  border-radius: 12px;
+  padding: 14px 8px;
+  text-align: center;
+}
+.res-cell.off {
+  background: var(--surface2);
+  border-color: var(--border);
+  opacity: .4;
+}
+.rc-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: .65;
+  margin-bottom: 5px;
+}
+.rc-val {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.rc-un {
+  font-size: 11px;
+  color: var(--accent);
+  opacity: .6;
+  margin-top: 2px;
+}
+.res-cell.off .rc-lbl,
+.res-cell.off .rc-val,
+.res-cell.off .rc-un { color: var(--muted); }
+
+/* ── Resultado 2 colunas (UI↔mg) ── */
+.res-2 {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 14px;
+}
+.res-pair { display: flex; flex-direction: column; gap: 7px; }
+.unit-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+.swap-col {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 2px;
+}
+.swap-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 9px;
+  display: flex;
+  transition: all .14s;
+}
+.swap-btn:hover { background: var(--accent-g); border-color: var(--accent-b); color: var(--accent); }
+
+/* ── Big result (UI↔mg) ── */
+.big-result {
+  background: linear-gradient(135deg, var(--accent-g), transparent);
+  border: 1px solid var(--accent-b);
+  border-radius: 12px;
+  padding: 16px 18px;
+  text-align: center;
+  min-height: 68px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.big-lbl { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); opacity: .65; margin-bottom: 5px; }
+.big-val { font-family: var(--mono); font-size: 26px; font-weight: 500; color: var(--accent); font-variant-numeric: tabular-nums; }
+.big-un  { font-size: 13px; color: var(--accent); opacity: .65; margin-left: 4px; }
+.empty-hint { color: var(--dim); font-size: 12.5px; }
+
+/* ── Aviso ── */
+.warn-box {
+  background: var(--warn-g);
+  border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent);
+  border-radius: 8px;
+  padding: 9px 13px;
+  font-size: 12px;
+  color: var(--warn);
+  line-height: 1.55;
+  margin-bottom: 10px;
+  display: none;
+}
+.warn-box.show { display: block; }
+
+/* ── Vazio ── */
+.empty-state { text-align: center; color: var(--dim); font-size: 13px; padding: 20px 0 8px; }
+
+/* ── Divider + disclaimer ── */
+hr { border: none; border-top: 1px solid var(--border); margin: 16px 0 14px; }
+.disclaimer { font-size: 11px; color: var(--dim); text-align: center; line-height: 1.65; }
+.disclaimer strong { color: var(--muted); font-weight: 500; }
+
+/* Tabs 3 colunas */
+.tabs { grid-template-columns: 1fr 1fr 1fr; }
+
+/* ── Tema ── */
+.theme-btn {
+  position: fixed;
+  top: 14px; right: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 7px;
+  font-size: 15px;
+  line-height: 1;
+  display: flex;
+}
+.theme-btn:hover { background: var(--surface2); }
+
+/* ── Calendário vacinal ── */
+.vacc-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.vf-btn {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 13px;
+  cursor: pointer;
+  transition: all .13s;
+  white-space: nowrap;
+}
+.vf-btn.active {
+  background: var(--accent-g);
+  border-color: var(--accent-b);
+  color: var(--accent);
+}
+.vacc-timeline { display: flex; flex-direction: column; gap: 12px; }
+.vacc-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color .15s;
+}
+.vacc-card.hidden { display: none; }
+.vacc-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.vacc-card-head:hover { background: rgba(255,255,255,.02); }
+.age-pill {
+  background: var(--accent-g);
+  border: 1px solid var(--accent-b);
+  border-radius: 8px;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  white-space: nowrap;
+  min-width: 72px;
+  text-align: center;
+}
+.vacc-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+}
+.vacc-card-count {
+  font-size: 11px;
+  color: var(--muted);
+}
+.chevron {
+  color: var(--muted);
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+.vacc-card.open .chevron { transform: rotate(180deg); }
+.vacc-card-body {
+  display: none;
+  padding: 0 14px 14px;
+  flex-direction: column;
+  gap: 8px;
+}
+.vacc-card.open .vacc-card-body { display: flex; }
+.vacc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.vacc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.vacc-item-info { flex: 1; min-width: 0; }
+.vacc-nome {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.vacc-doenca {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.vacc-dose-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 2px 7px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+/* Cores por tipo */
+.tipo-viral    { background: rgba(40,196,168,.15); color: var(--accent); border: 1px solid var(--accent-b); }
+.tipo-bact     { background: rgba(245,165,64,.12); color: var(--warn);   border: 1px solid color-mix(in srgb,var(--warn) 40%,transparent); }
+.tipo-comb     { background: rgba(160,130,255,.12); color: #A08AFF;      border: 1px solid rgba(160,130,255,.35); }
+.tipo-toxoid   { background: rgba(100,180,255,.12); color: #64B4FF;      border: 1px solid rgba(100,180,255,.35); }
+.dot-viral  { background: var(--accent); }
+.dot-bact   { background: var(--warn); }
+.dot-comb   { background: #A08AFF; }
+.dot-toxoid { background: #64B4FF; }
+
+.vacc-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.leg-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+/* ── Status + país tags ── */
+.vacc-status {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: 5px;
+  padding: 3px 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.status-obrig {
+  background: rgba(239,80,80,.14);
+  color: #EF5050;
+  border: 1px solid rgba(239,80,80,.35);
+}
+.status-rec {
+  background: var(--accent-g);
+  color: var(--accent);
+  border: 1px solid var(--accent-b);
+}
+.pais-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+.pais-tag {
+  font-size: 10.5px;
+  font-weight: 500;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+  padding: 2px 7px;
+}
+
+/* ── Rodapé ── */
+.footer {
+  margin-top: 20px;
+  font-size: 11px;
+  color: var(--dim);
+  text-align: center;
+}
+.footer a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color .15s;
+}
+.footer a:hover { color: var(--accent); }
+
+/* ── Tirzepatida ── */
+.conc-presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; }
+.cp-btn {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all .12s;
+}
+.cp-btn.active, .cp-btn:hover { background: var(--accent-g); border-color: var(--accent-b); color: var(--accent); }
+.tirz-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.tirz-cell {
+  background: linear-gradient(145deg, var(--accent-g), transparent 80%);
+  border: 1px solid var(--accent-b);
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+}
+</style>
+
+<button class="theme-btn" onclick="toggleTheme()" aria-label="Tema">
+  <span id="ti">☀</span>
+</button>
+
+<div class="app-header">
+  <div class="eyebrow">Calculadoras de Medicação</div>
+  <h1><strong>Dose</strong> · <strong>UI</strong> · <strong>mg</strong></h1>
+</div>
+
+<!-- Abas -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="setTab('dose')" id="tab-dose">
+    <span class="tab-icon">⚖️</span>
+    Dose por Peso
+  </button>
+  <button class="tab-btn" onclick="setTab('conv')" id="tab-conv">
+    <span class="tab-icon">💉</span>
+    Conversor UI ↔ mg
+  </button>
+  <button class="tab-btn" onclick="setTab('vacc')" id="tab-vacc">
+    <span class="tab-icon">🩺</span>
+    Vacinas
+  </button>
+</div>
+
+<div class="card">
+
+<!-- ════════════════════════════════════════
+     PAINEL 1 — Dose por Peso
+════════════════════════════════════════ -->
+<div class="panel active" id="panel-dose">
+
+  <div class="field">
+    <div class="fl">Peso do paciente</div>
+    <div class="peso-wrap">
+      <input type="number" id="peso" placeholder="0" min="0.5" max="200" step="0.1" oninput="calcDose()">
+      <span class="peso-kg">kg</span>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="fl">Medicamento</div>
+    <div class="sel-wrap">
+      <select id="med" onchange="onMedChange()">
+        <optgroup label="Analgésicos / Antitérmicos">
+          <option value="dipirona">Dipirona (Metamizol)</option>
+          <option value="paracetamol">Paracetamol</option>
+          <option value="ibuprofeno">Ibuprofeno</option>
+          <option value="nimesulida">Nimesulida</option>
+        </optgroup>
+        <optgroup label="Antibióticos">
+          <option value="amoxicilina">Amoxicilina</option>
+          <option value="amoxiclav">Amoxicilina + Clavulanato</option>
+          <option value="azitromicina">Azitromicina</option>
+          <option value="claritromicina">Claritromicina</option>
+          <option value="cefalexina">Cefalexina</option>
+          <option value="smztmp">Sulfametoxazol + Trimetoprima (SMZ-TMP)</option>
+          <option value="metronidazol">Metronidazol</option>
+          <option value="doxiciclina">Doxiciclina (≥ 8 anos)</option>
+          <option value="ciprofloxacino">Ciprofloxacino (adultos)</option>
+          <option value="nitrofurantoina">Nitrofurantoína (ITU)</option>
+        </optgroup>
+      </select>
+      <span class="sel-arr"><svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="fl">Formulação</div>
+    <div class="sel-wrap">
+      <select id="form" onchange="calcDose()"></select>
+      <span class="sel-arr"><svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
+  </div>
+
+  <div id="slider-row" style="display:none; margin-bottom:14px;">
+    <div class="fl" id="slider-lbl">Dose</div>
+    <div class="slider-row">
+      <input type="range" id="d-slider" oninput="onSlider()">
+      <span class="slider-val" id="d-disp">—</span>
+    </div>
+  </div>
+
+  <div id="freq-row" style="display:none; margin-bottom:14px;">
+    <div class="fl">Frequência</div>
+    <div class="toggles" id="freq-toggles"></div>
+  </div>
+
+  <div class="warn-box" id="d-warn"></div>
+
+  <div id="d-empty" class="empty-state">Informe o peso e selecione o medicamento</div>
+
+  <div id="d-result" style="display:none">
+    <div class="res-grid">
+      <div class="res-cell" id="dc-mg">
+        <div class="rc-lbl">Por dose</div>
+        <div class="rc-val" id="dr-mg">—</div>
+        <div class="rc-un">mg</div>
+      </div>
+      <div class="res-cell" id="dc-ml">
+        <div class="rc-lbl" id="dc-ml-lbl">Volume</div>
+        <div class="rc-val" id="dr-ml">—</div>
+        <div class="rc-un" id="dc-ml-un">mL</div>
+      </div>
+      <div class="res-cell" id="dc-gt">
+        <div class="rc-lbl">Gotas</div>
+        <div class="rc-val" id="dr-gt">—</div>
+        <div class="rc-un">gts</div>
+      </div>
+    </div>
+    <div class="strip">
+      <span class="strip-label">Frequência</span>
+      <span class="strip-val" id="dr-freq">—</span>
+    </div>
+    <div class="strip">
+      <span class="strip-label">Total / dia</span>
+      <span class="strip-val" id="dr-dia">—</span>
+    </div>
+    <div class="strip" id="dr-maxrow" style="display:none">
+      <span class="strip-label">⚠ Máx. por dose</span>
+      <span class="strip-val" id="dr-max">—</span>
+    </div>
+  </div>
+
+  <hr>
+  <div class="disclaimer">
+    <strong>Referência clínica</strong> — confirme com o prescritor. Peso, idade e indicação alteram a conduta.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAINEL 2 — Conversor UI ↔ mg
+════════════════════════════════════════ -->
+<div class="panel" id="panel-conv">
+
+  <div class="field">
+    <div class="fl">Substância</div>
+    <div class="sel-wrap">
+      <select id="subst" onchange="onSubstChange()">
+        <optgroup label="Hormônios e análogos">
+          <option value="insulina_u100">Insulina (U-100)</option>
+          <option value="insulina_u40">Insulina (U-40)</option>
+          <option value="insulina_u500">Insulina (U-500)</option>
+          <option value="hcg">hCG (Gonadotrofina Coriônica)</option>
+          <option value="progesterona">Progesterona injetável</option>
+          <option value="epo">Eritropoetina (EPO)</option>
+          <option value="tirzepatida">Tirzepatida (Mounjaro / Zepbound)</option>
+        </optgroup>
+        <optgroup label="Anticoagulantes">
+          <option value="heparina">Heparina não-fracionada</option>
+          <option value="enoxaparina">Enoxaparina (Clexane®)</option>
+        </optgroup>
+        <optgroup label="Vitaminas">
+          <option value="vit_d3">Vitamina D3 (colecalciferol)</option>
+          <option value="vit_a">Vitamina A (retinol)</option>
+          <option value="vit_e_nat">Vitamina E — natural (d-alfa)</option>
+          <option value="vit_e_sin">Vitamina E — sintética (dl-alfa)</option>
+        </optgroup>
+      </select>
+      <span class="sel-arr"><svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
+  </div>
+
+  <!-- Painel padrão UI ↔ mg -->
+  <div id="c-std">
+    <div class="res-2">
+      <div class="res-pair">
+        <div class="fl">Valor em UI</div>
+        <input type="number" class="input-base" id="c-ui" placeholder="0" min="0" step="any" oninput="calcConv('ui')">
+        <div class="unit-badge">UI / IU</div>
+      </div>
+      <div class="swap-col">
+        <button class="swap-btn" onclick="swapConv()" title="Trocar">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M11 2l3 3-3 3M5 14l-3-3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 5H4M12 11H2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="res-pair">
+        <div class="fl">Valor em mg</div>
+        <input type="number" class="input-base" id="c-mg" placeholder="0" min="0" step="any" oninput="calcConv('mg')">
+        <div class="unit-badge">mg</div>
+      </div>
+    </div>
+
+    <div class="strip" id="c-fator">
+      <span class="strip-label" id="c-fator-lbl">1 UI =</span>
+      <span class="strip-val" id="c-fator-val">—</span>
+    </div>
+
+    <div class="big-result" id="c-result">
+      <div class="empty-hint">Digite um valor para calcular</div>
+    </div>
+  </div>
+
+  <!-- Painel Tirzepatida -->
+  <div id="c-tirz" style="display:none">
+    <div class="field">
+      <div class="fl">Concentração do frasco (mg/mL)</div>
+      <input type="number" class="input-base" id="t-conc" placeholder="ex: 5" min="0.1" step="0.1" oninput="calcTirz(); updConcBtns()">
+      <div class="conc-presets">
+        <button class="cp-btn active" onclick="setConc(2.5)">2,5 mg/mL</button>
+        <button class="cp-btn" onclick="setConc(5)">5 mg/mL</button>
+        <button class="cp-btn" onclick="setConc(10)">10 mg/mL</button>
+        <button class="cp-btn" onclick="setConc(15)">15 mg/mL</button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="fl">Dose (mg)</div>
+      <input type="number" class="input-base" id="t-dose" placeholder="ex: 2,5" min="0" step="0.5" oninput="calcTirz()">
+    </div>
+    <div class="tirz-grid" id="t-res" style="display:none">
+      <div class="tirz-cell">
+        <div class="rc-lbl">Aspirar</div>
+        <div class="rc-val" id="t-ml">—</div>
+        <div class="rc-un">mL</div>
+      </div>
+      <div class="tirz-cell">
+        <div class="rc-lbl">Seringa U-100</div>
+        <div class="rc-val" id="t-un">—</div>
+        <div class="rc-un">unidades</div>
+      </div>
+    </div>
+    <div class="empty-state" id="t-empty">Informe a dose e a concentração</div>
+    <div class="strip" style="margin-top:10px">
+      <span class="strip-label">1 mL = 100 unidades na seringa U-100</span>
+      <span class="strip-val">conc. × mL = mg</span>
+    </div>
+  </div>
+
+  <hr>
+  <div class="disclaimer">
+    <strong>Atenção:</strong> confirme com o fabricante e um profissional de saúde antes de aplicar qualquer dose.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAINEL 3 — Calendário de Vacinas
+════════════════════════════════════════ -->
+<div class="panel" id="panel-vacc">
+
+  <!-- Filtros por faixa -->
+  <div class="vacc-filters" id="vacc-filters"></div>
+
+  <!-- Legenda tipos -->
+  <div class="vacc-legenda">
+    <div class="leg-item"><div class="leg-dot dot-viral"></div>Viral</div>
+    <div class="leg-item"><div class="leg-dot dot-bact"></div>Bacteriana</div>
+    <div class="leg-item"><div class="leg-dot dot-comb"></div>Combinada</div>
+    <div class="leg-item"><div class="leg-dot dot-toxoid"></div>Toxoide / subunidade</div>
+    <div class="leg-item"><span class="vacc-status status-obrig" style="font-size:9px;padding:2px 6px">Obrigatória</span></div>
+    <div class="leg-item"><span class="vacc-status status-rec" style="font-size:9px;padding:2px 6px">Recomendada</span></div>
+  </div>
+
+  <div class="vacc-timeline" id="vacc-timeline"></div>
+
+  <hr>
+  <div class="disclaimer">
+    <strong>Calendário PNI 2024</strong> (Programa Nacional de Imunizações / MS).
+    Calendários estaduais e de grupos de risco podem incluir vacinas adicionais.
+  </div>
+</div>
+
+</div><!-- /card -->
+
+<div class="footer">
+  © 2025 <a href="https://www.linkedin.com/in/tmachadot/" target="_blank" rel="noopener">TMG Consult</a>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// ABAS
+// ════════════════════════════════════════
+function setTab(t) {
+  ["dose","conv","vacc"].forEach(id => {
+    document.getElementById("tab-"+id).classList.toggle("active", id===t);
+    document.getElementById("panel-"+id).classList.toggle("active", id===t);
+  });
+}
+
+// ════════════════════════════════════════
+// CONVERSOR UI ↔ mg
+// ════════════════════════════════════════
+const SUBST = {
+  insulina_u100:{mgUI:0.0347,nota:"1 mL = 100 UI (padrão U-100)"},
+  insulina_u40: {mgUI:0.0347,nota:"1 mL = 40 UI (U-40)"},
+  insulina_u500:{mgUI:0.0347,nota:"1 mL = 500 UI (U-500 concentrada)"},
+  hcg:          {mgUI:0.000833,nota:"~1200 UI/mg (WHO 3rd IS)"},
+  progesterona: {mgUI:0.015625,nota:"1 UI ≈ 1/64 mg (USP)"},
+  epo:          {mgUI:0.0000083,nota:"~120.000 UI/mg (WHO)"},
+  heparina:     {mgUI:0.007143,nota:"~140 UI/mg (heparina sódica USP)"},
+  enoxaparina:  {mgUI:0.01,nota:"100 UI anti-Xa = 1 mg"},
+  vit_d3:       {mgUI:0.000025,nota:"1 UI = 0,025 µg colecalciferol",menor:{un:"µg",f:0.025}},
+  vit_a:        {mgUI:0.0003,nota:"1 UI = 0,3 µg retinol",menor:{un:"µg",f:0.3}},
+  vit_e_nat:    {mgUI:0.67,nota:"1 UI = 0,67 mg d-alfa-tocoferol"},
+  vit_e_sin:    {mgUI:0.91,nota:"1 UI = 0,91 mg dl-alfa-tocoferol"},
+};
+
+let cActiveField = null;
+
+function onSubstChange() {
+  const v = document.getElementById("subst").value;
+  const isTirz = v==="tirzepatida";
+  document.getElementById("c-std").style.display  = isTirz ? "none" : "";
+  document.getElementById("c-tirz").style.display = isTirz ? "" : "none";
+  if (!isTirz) { updFator(); calcConv(null); }
+}
+
+function updFator() {
+  const s = SUBST[document.getElementById("subst").value];
+  if (!s) return;
+  const val = s.menor
+    ? `${fmtN(s.menor.f)} ${s.menor.un}  (${fmtN(s.mgUI,8)} mg)`
+    : `${fmtN(s.mgUI,8)} mg`;
+  document.getElementById("c-fator-val").textContent = val;
+  document.getElementById("c-fator").title = s.nota;
+}
+
+function calcConv(from) {
+  if (from) cActiveField = from;
+  const s  = SUBST[document.getElementById("subst").value];
+  if (!s) return;
+  const ui = document.getElementById("c-ui");
+  const mg = document.getElementById("c-mg");
+  const rb = document.getElementById("c-result");
+
+  if (cActiveField==="ui") {
+    const v = parseFloat(ui.value);
+    mg.classList.remove("computed");
+    if (isNaN(v)||v<0) { mg.value=""; mg.classList.remove("computed"); rb.innerHTML='<div class="empty-hint">Digite um valor para calcular</div>'; return; }
+    const r = v*s.mgUI;
+    mg.value = fmtInput(r);
+    mg.classList.add("computed");
+    const ex = s.menor ? `<span class="big-un">(${fmtN(v*s.menor.f,4)} ${s.menor.un})</span>` : "";
+    rb.innerHTML = `<div class="big-lbl">${fmtN(v)} UI equivale a</div><div><span class="big-val">${fmtN(r,6)}</span><span class="big-un"> mg</span> ${ex}</div>`;
+  } else if (cActiveField==="mg") {
+    const v = parseFloat(mg.value);
+    ui.classList.remove("computed");
+    if (isNaN(v)||v<0) { ui.value=""; ui.classList.remove("computed"); rb.innerHTML='<div class="empty-hint">Digite um valor para calcular</div>'; return; }
+    const r = v/s.mgUI;
+    ui.value = fmtInput(r);
+    ui.classList.add("computed");
+    rb.innerHTML = `<div class="big-lbl">${fmtN(v,6)} mg equivale a</div><div><span class="big-val">${fmtN(r,4)}</span><span class="big-un"> UI</span></div>`;
+  } else {
+    rb.innerHTML = '<div class="empty-hint">Digite um valor para calcular</div>';
+  }
+}
+
+function swapConv() {
+  cActiveField = cActiveField==="ui" ? "mg" : "ui";
+  document.getElementById(cActiveField==="ui" ? "c-mg" : "c-ui").focus();
+}
+
+// Tirzepatida
+function setConc(v) { document.getElementById("t-conc").value=v; updConcBtns(); calcTirz(); }
+function updConcBtns() {
+  const v = parseFloat(document.getElementById("t-conc").value);
+  document.querySelectorAll(".cp-btn").forEach(b => b.classList.toggle("active", parseFloat(b.textContent)===v));
+}
+function calcTirz() {
+  const dose=parseFloat(document.getElementById("t-dose").value);
+  const conc=parseFloat(document.getElementById("t-conc").value);
+  const res=document.getElementById("t-res"), emp=document.getElementById("t-empty");
+  if (isNaN(dose)||isNaN(conc)||dose<=0||conc<=0){ res.style.display="none"; emp.style.display=""; return; }
+  const ml=dose/conc, un=ml*100;
+  document.getElementById("t-ml").textContent=fmtN(ml,4);
+  document.getElementById("t-un").textContent=fmtN(un,4);
+  res.style.display="grid"; emp.style.display="none";
+}
+
+// Formatadores
+function fmtN(n,sig=4) {
+  if (isNaN(n)) return "—";
+  if (Math.abs(n)>=1000) return n.toLocaleString("pt-BR",{maximumFractionDigits:2});
+  if (Math.abs(n)>=1)    return n.toLocaleString("pt-BR",{maximumFractionDigits:4});
+  return parseFloat(n.toPrecision(sig)).toLocaleString("pt-BR",{maximumSignificantDigits:sig});
+}
+function fmtInput(n) { return isNaN(n) ? "" : n<0.000001 ? n.toExponential(4) : parseFloat(n.toPrecision(8)); }
+
+// ════════════════════════════════════════
+// DOSE POR PESO
+// ════════════════════════════════════════
+const MEDS = {
+  dipirona:{
+    tipo:"analg", doseMin:10, doseMax:20, doseDefault:15,
+    freqOpts:["a cada 6h (4×/dia)","a cada 8h (3×/dia)","a cada 4h (6×/dia)"],
+    freqDiv:[4,3,6], freqDef:0,
+    maxDose:1000, maxDia:4000, pesoMin:5,
+    restricao:"Não usar em < 3 meses ou < 5 kg. Risco de agranulocitose — uso criterioso em crianças pequenas.",
+    forms:[
+      {id:"gotas500", nome:"Gotas 500 mg/mL (Novalgina®)", mgMl:500, gPorMl:20},
+      {id:"susp50",   nome:"Suspensão 50 mg/mL (pediátrica)", mgMl:50},
+      {id:"amp500",   nome:"Ampola 500 mg/mL — EV/IM (1g/2mL)", mgMl:500},
+      {id:"ev1",      nome:"Infusão EV diluída 1 mg/mL", mgMl:1},
+      {id:"comp500",  nome:"Comprimido 500 mg", tipo:"comp", mgComp:500},
+      {id:"comp1g",   nome:"Comprimido 1 g (1000 mg)", tipo:"comp", mgComp:1000},
+    ],
+  },
+  paracetamol:{
+    tipo:"analg", doseMin:10, doseMax:15, doseDefault:12,
+    freqOpts:["a cada 6h (4×/dia)","a cada 4–6h (5×/dia)","a cada 8h (3×/dia)"],
+    freqDiv:[4,5,3], freqDef:0,
+    maxDose:1000, maxDia:4000, pesoMin:2, restricao:null,
+    forms:[
+      {id:"gotas200", nome:"Gotas 200 mg/mL (Tylenol®)", mgMl:200, gPorMl:20},
+      {id:"susp32",   nome:"Suspensão 32 mg/mL (pediátrica)", mgMl:32},
+      {id:"comp500",  nome:"Comprimido 500 mg", tipo:"comp", mgComp:500},
+      {id:"comp750",  nome:"Comprimido 750 mg", tipo:"comp", mgComp:750},
+    ],
+  },
+  ibuprofeno:{
+    tipo:"analg", doseMin:5, doseMax:10, doseDefault:7,
+    freqOpts:["a cada 6h (4×/dia)","a cada 8h (3×/dia)"],
+    freqDiv:[4,3], freqDef:0,
+    maxDose:600, maxDia:2400, pesoMin:7,
+    restricao:"Não usar em < 6 meses. Evitar em desidratados e com comprometimento renal ou GI.",
+    forms:[
+      {id:"susp50",  nome:"Suspensão 50 mg/mL (Alivium®/Advil®)", mgMl:50},
+      {id:"susp20",  nome:"Suspensão 20 mg/mL (100 mg/5 mL)", mgMl:20},
+      {id:"comp200", nome:"Comprimido 200 mg", tipo:"comp", mgComp:200},
+      {id:"comp400", nome:"Comprimido 400 mg", tipo:"comp", mgComp:400},
+      {id:"comp600", nome:"Comprimido 600 mg", tipo:"comp", mgComp:600},
+    ],
+  },
+  nimesulida:{
+    tipo:"analg", doseMin:5, doseMax:5, doseDefault:5,
+    freqOpts:["a cada 12h (2×/dia)"],
+    freqDiv:[2], freqDef:0,
+    maxDose:100, maxDia:200, pesoMin:40,
+    restricao:"⚠ Contraindicada em < 12 anos (ANVISA). Adultos: dose fixa 100 mg/dose.",
+    forms:[
+      {id:"susp10",  nome:"Suspensão 10 mg/mL (50 mg/5 mL)", mgMl:10},
+      {id:"comp100", nome:"Comprimido 100 mg", tipo:"comp", mgComp:100},
+    ],
+  },
+  amoxicilina:{
+    tipo:"antib", doseMin:25, doseMax:50, doseDefault:40,
+    freqOpts:["a cada 8h (3×/dia)","a cada 12h (2×/dia)"],
+    freqDiv:[3,2], freqDef:0,
+    maxDia:3000, pesoMin:2, restricao:null,
+    forms:[
+      {id:"susp50",  nome:"Suspensão 50 mg/mL (250 mg/5 mL)", mgMl:50},
+      {id:"susp80",  nome:"Suspensão 80 mg/mL (400 mg/5 mL)", mgMl:80},
+      {id:"cap500",  nome:"Cápsula / Comprimido 500 mg", tipo:"comp", mgComp:500},
+    ],
+  },
+  amoxiclav:{
+    tipo:"antib", doseMin:45, doseMax:90, doseDefault:45,
+    freqOpts:["a cada 12h (2×/dia)","a cada 8h (3×/dia)"],
+    freqDiv:[2,3], freqDef:0,
+    maxDia:4000, pesoMin:2,
+    restricao:"Dose refere-se ao componente amoxicilina. Preferir formulação 400/57 mg — clavulanato máx 10 mg/kg/dia.",
+    forms:[
+      {id:"susp80",  nome:"Suspensão 80 mg/mL (400/57 mg/5 mL)", mgMl:80},
+      {id:"susp50",  nome:"Suspensão 50 mg/mL (250/62,5 mg/5 mL)", mgMl:50},
+      {id:"comp875", nome:"Comprimido 875/125 mg", tipo:"comp", mgComp:875},
+    ],
+  },
+  azitromicina:{
+    tipo:"antib", doseMin:10, doseMax:10, doseDefault:10,
+    freqOpts:["1×/dia × 3 dias (10 mg/kg/dia)","1×/dia × 5 dias (10 mg/kg dia 1, 5 mg/kg dias 2–5)"],
+    freqDiv:[1,1], freqDef:0,
+    maxDia:500, pesoMin:2, restricao:null,
+    forms:[
+      {id:"susp40",  nome:"Suspensão 40 mg/mL (200 mg/5 mL)", mgMl:40},
+      {id:"comp500", nome:"Comprimido 500 mg", tipo:"comp", mgComp:500},
+    ],
+  },
+  cefalexina:{
+    tipo:"antib", doseMin:25, doseMax:50, doseDefault:40,
+    freqOpts:["a cada 6h (4×/dia)","a cada 8h (3×/dia)","a cada 12h (2×/dia)"],
+    freqDiv:[4,3,2], freqDef:0,
+    maxDia:4000, pesoMin:2, restricao:null,
+    forms:[
+      {id:"susp50",  nome:"Suspensão 50 mg/mL (250 mg/5 mL)", mgMl:50},
+      {id:"cap500",  nome:"Cápsula 500 mg", tipo:"comp", mgComp:500},
+    ],
+  },
+  claritromicina:{
+    tipo:"antib", doseMin:15, doseMax:15, doseDefault:15,
+    freqOpts:["a cada 12h (2×/dia)"],
+    freqDiv:[2], freqDef:0,
+    maxDia:1000, pesoMin:2, restricao:null,
+    forms:[
+      {id:"susp50",  nome:"Suspensão 50 mg/mL (250 mg/5 mL)", mgMl:50},
+      {id:"comp250", nome:"Comprimido 250 mg", tipo:"comp", mgComp:250},
+      {id:"comp500", nome:"Comprimido 500 mg", tipo:"comp", mgComp:500},
+    ],
+  },
+  smztmp:{
+    tipo:"antib", doseMin:8, doseMax:10, doseDefault:8,
+    freqOpts:["a cada 12h (2×/dia)"],
+    freqDiv:[2], freqDef:0,
+    maxDia:320,   // máx 320 mg/dia de trimetoprima
+    pesoMin:2,
+    restricao:"Dose calculada pelo componente trimetoprima (TMP). Não usar em < 2 meses nem em insuficiência renal grave.",
+    forms:[
+      {id:"susp8",   nome:"Suspensão 8 mg TMP/mL (40+200 mg/5 mL)", mgMl:8},
+      {id:"comp80",  nome:"Comprimido 80+400 mg (TMP 80 mg)", tipo:"comp", mgComp:80},
+      {id:"comp160", nome:"Comprimido 160+800 mg (TMP 160 mg)", tipo:"comp", mgComp:160},
+    ],
+  },
+  metronidazol:{
+    tipo:"antib", doseMin:20, doseMax:40, doseDefault:30,
+    freqOpts:["a cada 8h (3×/dia)","a cada 12h (2×/dia)"],
+    freqDiv:[3,2], freqDef:0,
+    maxDia:2000, pesoMin:2,
+    restricao:"Evitar no 1º trimestre de gestação. Não usar com álcool.",
+    forms:[
+      {id:"susp40",  nome:"Suspensão 40 mg/mL (200 mg/5 mL)", mgMl:40},
+      {id:"comp250", nome:"Comprimido 250 mg", tipo:"comp", mgComp:250},
+      {id:"comp400", nome:"Comprimido 400 mg", tipo:"comp", mgComp:400},
+    ],
+  },
+  doxiciclina:{
+    tipo:"antib", doseMin:2, doseMax:4, doseDefault:3,
+    freqOpts:["1×/dia","a cada 12h (2×/dia)"],
+    freqDiv:[1,2], freqDef:0,
+    maxDia:200, pesoMin:25,   // ≥ 8 anos (~25 kg)
+    restricao:"Contraindicada em < 8 anos e gestantes — deposita em ossos e dentes em desenvolvimento.",
+    forms:[
+      {id:"comp100", nome:"Comprimido / Cápsula 100 mg", tipo:"comp", mgComp:100},
+    ],
+  },
+  ciprofloxacino:{
+    tipo:"antib", doseMin:20, doseMax:30, doseDefault:20,
+    freqOpts:["a cada 12h (2×/dia)"],
+    freqDiv:[2], freqDef:0,
+    maxDia:1500, pesoMin:18,  // uso restrito em < 18 anos (exceto fibrose cística / ITU)
+    restricao:"Uso em < 18 anos restrito a indicações específicas (ex: fibrose cística, ITU complicada). Risco de artropatia.",
+    forms:[
+      {id:"comp250", nome:"Comprimido 250 mg", tipo:"comp", mgComp:250},
+      {id:"comp500", nome:"Comprimido 500 mg", tipo:"comp", mgComp:500},
+    ],
+  },
+  nitrofurantoina:{
+    tipo:"antib", doseMin:5, doseMax:7, doseDefault:5,
+    freqOpts:["a cada 6h (4×/dia)"],
+    freqDiv:[4], freqDef:0,
+    maxDia:400, pesoMin:12,   // > 3 meses / ITU
+    restricao:"Uso exclusivo para ITU (trato urinário baixo). Não usar em < 3 meses, IR grave (ClCr < 30) ou próximo ao parto.",
+    forms:[
+      {id:"cap100",  nome:"Cápsula 100 mg", tipo:"comp", mgComp:100},
+      {id:"cap50",   nome:"Cápsula 50 mg",  tipo:"comp", mgComp:50},
+    ],
+  },
+};
+
+let dFreqIdx=0, dDoseAtual=0;
+
+function getMed() { return MEDS[document.getElementById("med").value]; }
+function getForm() {
+  const m=getMed(), fid=document.getElementById("form").value;
+  return m.forms.find(f=>f.id===fid)||m.forms[0];
+}
+
+function onMedChange() {
+  const m=getMed();
+  dFreqIdx=m.freqDef; dDoseAtual=m.doseDefault;
+  // forms
+  const fs=document.getElementById("form");
+  fs.innerHTML=m.forms.map(f=>`<option value="${f.id}">${f.nome}</option>`).join("");
+  // slider
+  const sr=document.getElementById("slider-row"), sl=document.getElementById("d-slider");
+  if (m.doseMin!==m.doseMax) {
+    sr.style.display="";
+    sl.min=m.doseMin; sl.max=m.doseMax; sl.value=m.doseDefault;
+    document.getElementById("slider-lbl").textContent=`Dose (mg/kg/${m.tipo==="antib"?"dia":"dose"})`;
+    updSlider();
+  } else { sr.style.display="none"; dDoseAtual=m.doseDefault; }
+  // freq
+  const fr=document.getElementById("freq-row"), fg=document.getElementById("freq-toggles");
+  if (m.freqOpts.length>1) {
+    fr.style.display="";
+    fg.innerHTML=m.freqOpts.map((f,i)=>
+      `<button class="tog-btn ${i===dFreqIdx?"active":""}" onclick="setFreqD(${i})">${f}</button>`
+    ).join("");
+  } else { fr.style.display="none"; }
+  calcDose();
+}
+
+function onSlider() { dDoseAtual=parseFloat(document.getElementById("d-slider").value); updSlider(); calcDose(); }
+function updSlider() {
+  const m=getMed(), un=m.tipo==="antib"?"mg/kg/dia":"mg/kg/dose";
+  document.getElementById("d-disp").textContent=`${dDoseAtual} ${un}`;
+}
+function setFreqD(i) {
+  dFreqIdx=i;
+  document.querySelectorAll("#freq-toggles .tog-btn").forEach((b,j)=>b.classList.toggle("active",i===j));
+  calcDose();
+}
+
+function calcDose() {
+  const m=getMed(), f=getForm();
+  const peso=parseFloat(document.getElementById("peso").value);
+  const wb=document.getElementById("d-warn");
+  if (m.restricao) { wb.textContent=m.restricao; wb.classList.add("show"); }
+  else wb.classList.remove("show");
+
+  if (isNaN(peso)||peso<=0) {
+    document.getElementById("d-empty").style.display="";
+    document.getElementById("d-result").style.display="none";
+    return;
+  }
+
+  const nD=m.freqDiv[dFreqIdx];
+  let mgDia, mgDose;
+  if (m.tipo==="antib") {
+    mgDia=Math.min(peso*dDoseAtual, m.maxDia||Infinity);
+    mgDose=mgDia/nD;
+  } else {
+    mgDose=Math.min(peso*dDoseAtual, m.maxDose||Infinity);
+    mgDia=Math.min(mgDose*nD, m.maxDia||Infinity);
+  }
+
+  const isComp=f.tipo==="comp";
+  let ml=null, gt=null;
+  if (!isComp) { ml=mgDose/f.mgMl; if (f.gPorMl) gt=ml*f.gPorMl; }
+
+  document.getElementById("d-empty").style.display="none";
+  document.getElementById("d-result").style.display="";
+  document.getElementById("dr-mg").textContent=fmtMg(mgDose);
+
+  const cm=document.getElementById("dc-ml");
+  const lm=document.getElementById("dc-ml-lbl");
+  const um=document.getElementById("dc-ml-un");
+  if (!isComp) {
+    cm.classList.remove("off"); lm.textContent="Volume"; um.textContent="mL";
+    document.getElementById("dr-ml").textContent=fmtVol(ml);
+  } else {
+    cm.classList.remove("off"); lm.textContent="Comprimidos"; um.textContent="cp";
+    document.getElementById("dr-ml").textContent=fmtVol(mgDose/f.mgComp);
+  }
+
+  const cg=document.getElementById("dc-gt");
+  if (gt!==null) { cg.classList.remove("off"); document.getElementById("dr-gt").textContent=Math.round(gt); }
+  else { cg.classList.add("off"); document.getElementById("dr-gt").textContent="—"; }
+
+  document.getElementById("dr-freq").textContent=m.freqOpts[dFreqIdx];
+  document.getElementById("dr-dia").textContent=`${fmtMg(mgDia)} mg`;
+
+  const mr=document.getElementById("dr-maxrow");
+  if (m.maxDose && peso*dDoseAtual>m.maxDose*0.85) {
+    mr.style.display=""; document.getElementById("dr-max").textContent=`${m.maxDose} mg`;
+  } else mr.style.display="none";
+}
+
+function fmtMg(v) {
+  if (isNaN(v)) return "—";
+  if (v>=100) return Math.round(v).toLocaleString("pt-BR");
+  if (v>=10)  return v.toLocaleString("pt-BR",{maximumFractionDigits:1});
+  return v.toLocaleString("pt-BR",{maximumFractionDigits:2});
+}
+function fmtVol(v) {
+  if (isNaN(v)) return "—";
+  if (v>=10) return v.toLocaleString("pt-BR",{maximumFractionDigits:1});
+  return v.toLocaleString("pt-BR",{maximumFractionDigits:2});
+}
+
+// ════════════════════════════════════════
+// CALENDÁRIO VACINAL — PNI 2024
+// ════════════════════════════════════════
+// tipo: viral | bact | comb | toxoid
+const CAL = [
+  {
+    id:"nascer", age:"Ao nascer", faixa:"bebe",
+    vacinas:[
+      {nome:"BCG",      doenca:"Tuberculose",  dose:"Dose única",  tipo:"bact"},
+      {nome:"Hepatite B",doenca:"Hepatite B",  dose:"1ª dose",     tipo:"viral"},
+    ]
+  },
+  {
+    id:"1mes", age:"1 mês", faixa:"bebe",
+    vacinas:[
+      {nome:"Hepatite B",doenca:"Hepatite B",  dose:"2ª dose",     tipo:"viral"},
+    ]
+  },
+  {
+    id:"2meses", age:"2 meses", faixa:"bebe",
+    vacinas:[
+      {nome:"Pentavalente (DTP+Hib+HepB)", doenca:"Difteria, Tétano, Coqueluche, Hib, Hepatite B", dose:"1ª dose", tipo:"comb"},
+      {nome:"VIP",       doenca:"Poliomielite (inativada)",   dose:"1ª dose", tipo:"viral"},
+      {nome:"Pneumocócica 10V", doenca:"Pneumococo",          dose:"1ª dose", tipo:"bact"},
+      {nome:"Rotavírus Humano", doenca:"Gastroenterite viral",dose:"1ª dose", tipo:"viral"},
+      {nome:"Meningocócica C",  doenca:"Meningite por Neisseria meningitidis C", dose:"1ª dose", tipo:"bact"},
+    ]
+  },
+  {
+    id:"4meses", age:"4 meses", faixa:"bebe",
+    vacinas:[
+      {nome:"Pentavalente (DTP+Hib+HepB)", doenca:"Difteria, Tétano, Coqueluche, Hib, Hepatite B", dose:"2ª dose", tipo:"comb"},
+      {nome:"VIP",       doenca:"Poliomielite (inativada)",   dose:"2ª dose", tipo:"viral"},
+      {nome:"Pneumocócica 10V", doenca:"Pneumococo",          dose:"2ª dose", tipo:"bact"},
+      {nome:"Rotavírus Humano", doenca:"Gastroenterite viral",dose:"2ª dose", tipo:"viral"},
+      {nome:"Meningocócica C",  doenca:"Meningite meningocócica C", dose:"2ª dose", tipo:"bact"},
+    ]
+  },
+  {
+    id:"6meses", age:"6 meses", faixa:"bebe",
+    vacinas:[
+      {nome:"Pentavalente (DTP+Hib+HepB)", doenca:"Difteria, Tétano, Coqueluche, Hib, Hepatite B", dose:"3ª dose", tipo:"comb"},
+      {nome:"VIP",       doenca:"Poliomielite (inativada)",   dose:"3ª dose", tipo:"viral"},
+      {nome:"Influenza",  doenca:"Gripe (influenza)",          dose:"1ª dose / anual", tipo:"viral"},
+    ]
+  },
+  {
+    id:"9meses", age:"9 meses", faixa:"bebe",
+    vacinas:[
+      {nome:"Febre Amarela", doenca:"Febre amarela", dose:"1ª dose", tipo:"viral"},
+    ]
+  },
+  {
+    id:"12meses", age:"12 meses", faixa:"crianca",
+    vacinas:[
+      {nome:"Tríplice Viral (SCR/MMR)", doenca:"Sarampo, Caxumba, Rubéola", dose:"1ª dose", tipo:"viral"},
+      {nome:"Pneumocócica 10V", doenca:"Pneumococo",          dose:"Reforço",  tipo:"bact"},
+      {nome:"Meningocócica C",  doenca:"Meningite meningocócica C", dose:"Reforço", tipo:"bact"},
+      {nome:"Hepatite A",       doenca:"Hepatite A",          dose:"Dose única",tipo:"viral"},
+    ]
+  },
+  {
+    id:"15meses", age:"15 meses", faixa:"crianca",
+    vacinas:[
+      {nome:"DTP",          doenca:"Difteria, Tétano, Coqueluche", dose:"1º reforço",  tipo:"toxoid"},
+      {nome:"VOP",          doenca:"Poliomielite (oral)",           dose:"1º reforço",  tipo:"viral"},
+      {nome:"Tríplice Viral (SCR/MMR)", doenca:"Sarampo, Caxumba, Rubéola", dose:"2ª dose", tipo:"viral"},
+      {nome:"Varicela (VORH)", doenca:"Catapora",                   dose:"1ª dose",     tipo:"viral"},
+    ]
+  },
+  {
+    id:"4anos", age:"4 anos", faixa:"crianca",
+    vacinas:[
+      {nome:"DTP",     doenca:"Difteria, Tétano, Coqueluche",  dose:"2º reforço", tipo:"toxoid"},
+      {nome:"VOP",     doenca:"Poliomielite (oral)",            dose:"2º reforço", tipo:"viral"},
+      {nome:"Varicela",doenca:"Catapora",                       dose:"Reforço",    tipo:"viral"},
+      {nome:"Febre Amarela", doenca:"Febre amarela",            dose:"Reforço",    tipo:"viral"},
+    ]
+  },
+  {
+    id:"9anos", age:"9 a 14 anos", faixa:"adolescente",
+    vacinas:[
+      {nome:"HPV Quadrivalente", doenca:"Papilomavírus humano (meninas e meninos)", dose:"2 doses (0 e 6 meses)", tipo:"viral"},
+      {nome:"Meningocócica ACWY",doenca:"Meningite meningocócica ACWY",             dose:"1ª dose",              tipo:"bact"},
+    ]
+  },
+  {
+    id:"11anos", age:"11 a 14 anos", faixa:"adolescente",
+    vacinas:[
+      {nome:"dTpa",       doenca:"Difteria, Tétano, Coqueluche (acelular)", dose:"Dose única (catch-up)", tipo:"toxoid"},
+      {nome:"Hepatite B", doenca:"Hepatite B (se não vacinado)",            dose:"3 doses",               tipo:"viral"},
+      {nome:"Influenza",  doenca:"Gripe (influenza)",                       dose:"Anual",                 tipo:"viral"},
+    ]
+  },
+  {
+    id:"adulto", age:"Adultos (≥ 20 anos)", faixa:"adulto",
+    vacinas:[
+      {nome:"dT (dupla adulto)", doenca:"Difteria e Tétano",       dose:"Reforço a cada 10 anos",tipo:"toxoid"},
+      {nome:"dTpa",              doenca:"Difteria, Tétano, Coqueluche", dose:"1 dose (substituir 1 dT)", tipo:"toxoid"},
+      {nome:"Hepatite B",        doenca:"Hepatite B (se não vacinado)", dose:"3 doses",            tipo:"viral"},
+      {nome:"Influenza",         doenca:"Gripe (influenza)",            dose:"Anual",              tipo:"viral"},
+      {nome:"Febre Amarela",     doenca:"Febre amarela (áreas de risco)", dose:"Dose única",       tipo:"viral"},
+      {nome:"Tríplice Viral",    doenca:"Sarampo, Caxumba, Rubéola (nascidos após 1960)", dose:"2 doses (se não vacinado)", tipo:"viral"},
+    ]
+  },
+  {
+    id:"gestante", age:"Gestantes", faixa:"gestante",
+    vacinas:[
+      {nome:"dTpa",        doenca:"Difteria, Tétano, Coqueluche", dose:"A cada gestação (a partir de 20ª semana)", tipo:"toxoid"},
+      {nome:"Influenza",   doenca:"Gripe (influenza)",             dose:"Anual",                tipo:"viral"},
+      {nome:"Hepatite B",  doenca:"Hepatite B (se não vacinada)",  dose:"3 doses",              tipo:"viral"},
+      {nome:"COVID-19",    doenca:"COVID-19",                      dose:"Conforme esquema vigente", tipo:"viral"},
+    ]
+  },
+  {
+    id:"viagem", age:"Viagens Internacionais", faixa:"viagem",
+    vacinas:[
+      {nome:"Febre Amarela",   doenca:"Exigida na fronteira por países endêmicos e por países que recebem viajantes vindos de zonas de risco",
+       dose:"Dose única (certificado vitalício — exigido a partir dos 9 meses de idade)",
+       tipo:"viral", status:"obrigat",
+       paises:["Angola","Benin","Burkina Faso","Burundi","Camarões","Congo (RDC)","Costa do Marfim","Gabão","Gana","Guiné","Mali","Namíbia","Níger","Nigéria","Ruanda","Senegal","São Tomé e Príncipe","Togo","Uganda","Bolívia (Amazônia)","Peru (Amazônia)","Equador (Amazônia)"]},
+
+      {nome:"Hepatite A",      doenca:"Transmitida por água/alimentos contaminados — alto risco em destinos com saneamento precário",
+       dose:"2 doses (0 e 6–12 meses) · Proteção parcial em 2 semanas",
+       tipo:"viral", status:"recom",
+       paises:["África (geral)","Ásia do Sul","Índia","Bangladesh","Paquistão","América Central","México","Haiti","Peru","Colômbia"]},
+
+      {nome:"Hepatite B",      doenca:"Risco para estadias longas, procedimentos médicos ou exposição sexual",
+       dose:"3 doses (0, 1 e 6 meses) ou esquema acelerado (0, 7, 21 dias + reforço 12 meses)",
+       tipo:"viral", status:"recom",
+       paises:["África Subsaariana","Ásia Oriental","China","Vietnã","Tailândia","Indonésia","Papua-Nova Guiné","Mongólia"]},
+
+      {nome:"Febre Tifoide",   doenca:"Transmitida por água/alimentos contaminados por Salmonella typhi",
+       dose:"Oral: 4 cápsulas (dias 1/3/5/7) · Injetável: dose única (reforço a cada 2–3 anos)",
+       tipo:"bact", status:"recom",
+       paises:["Índia","Nepal","Bangladesh","Paquistão","Indonésia","Filipinas","África Oriental","África Ocidental","Haiti","Peru"]},
+
+      {nome:"Meningocócica ACWY", doenca:"Obrigatória para peregrinação islâmica e alguns países do 'cinturão da meningite'",
+       dose:"Dose única (reforço a cada 5 anos)",
+       tipo:"bact", status:"obrigat",
+       paises:["Arábia Saudita (Hajj/Umra)","Burkina Faso","Chade","Etiópia","Gana","Mali","Níger","Nigéria","Senegal","Sudão","Togo"]},
+
+      {nome:"Raiva (pré-exposição)", doenca:"Risco para aventureiros, ciclistas, trabalho com animais e áreas remotas sem acesso a imunoglobulina",
+       dose:"3 doses (dias 0, 7 e 21) — reforço se exposição de risco",
+       tipo:"viral", status:"recom",
+       paises:["Índia","Nepal","Tailândia","Vietnã","Filipinas","Indonésia","China","África Subsaariana","Haiti","Bolivia (rural)","Peru (rural)"]},
+
+      {nome:"Encefalite Japonesa", doenca:"Vírus transmitido por mosquito Culex — risco em áreas rurais/arrozais, especialmente em longa estadia",
+       dose:"2 doses (dias 0 e 28)",
+       tipo:"viral", status:"recom",
+       paises:["China","Japão","Coreia","Vietnã","Tailândia","Camboja","Laos","Myanmar","Índia","Nepal","Bangladesh","Malásia","Filipinas","Papua-Nova Guiné"]},
+
+      {nome:"Encefalite por Carrapato (TBE)", doenca:"Arbovírus transmitido por carrapato Ixodes — risco em atividades ao ar livre em florestas",
+       dose:"3 doses (0, 1–3 e 5–12 meses) · Esquema acelerado disponível",
+       tipo:"viral", status:"recom",
+       paises:["Áustria","República Tcheca","Eslováquia","Alemanha","Suíça","Polônia","Países Bálticos","Suécia","Finlândia","Rússia","China (nordeste)"]},
+
+      {nome:"Cólera",          doenca:"Risco em áreas com surto ativo, saneamento precário — indicada principalmente para trabalhadores humanitários",
+       dose:"Oral: 2 doses com 1–6 semanas de intervalo (adultos e crianças ≥ 6 anos)",
+       tipo:"bact", status:"recom",
+       paises:["Haiti","Iêmen","Bangladesh","Moçambique","Etiópia","Sudão do Sul","Congo (RDC)","Zimbabwe"]},
+
+      {nome:"Influenza",       doenca:"Circulação sazonal invertida em destinos do hemisfério sul ou norte — atualizar antes de viagens longas",
+       dose:"Anual (vacina atualizada para a cepa circulante)",
+       tipo:"viral", status:"recom",
+       paises:["Qualquer destino internacional","Atenção extra: América do Sul (abr–set)","Europa e América do Norte (out–mar)","Trópicos (circulação ano todo)"]},
+
+      {nome:"COVID-19",        doenca:"Alguns países exigem comprovante de vacinação para entrada ou para evitar quarentena",
+       dose:"Esquema primário completo + dose de reforço conforme recomendação vigente",
+       tipo:"viral", status:"recom",
+       paises:["Verificar requisito atualizado de cada país antes do embarque — requisitos mudam com frequência"]},
+    ]
+  },
+  {
+    id:"idoso", age:"Idosos (≥ 60 anos)", faixa:"idoso",
+    vacinas:[
+      {nome:"Influenza",           doenca:"Gripe (influenza)",            dose:"Anual",        tipo:"viral"},
+      {nome:"Pneumocócica 23V",    doenca:"Pneumococo",                   dose:"Dose única + reforço em grupos de risco", tipo:"bact"},
+      {nome:"dT (dupla adulto)",   doenca:"Difteria e Tétano",            dose:"Reforço a cada 10 anos", tipo:"toxoid"},
+      {nome:"Herpes-Zóster",       doenca:"Herpes-zóster (≥ 60 anos)",    dose:"2 doses",      tipo:"viral"},
+      {nome:"Hepatite B",          doenca:"Hepatite B",                   dose:"3 doses (se não vacinado)", tipo:"viral"},
+      {nome:"Febre Amarela",       doenca:"Febre amarela (áreas de risco)",dose:"Dose única",   tipo:"viral"},
+    ]
+  },
+];
+
+const FAIXAS = [
+  {id:"all",         label:"Todas"},
+  {id:"bebe",        label:"Bebê (0–9 m)"},
+  {id:"crianca",     label:"Criança (1–4 a)"},
+  {id:"adolescente", label:"Adolescente"},
+  {id:"adulto",      label:"Adulto"},
+  {id:"gestante",    label:"Gestante"},
+  {id:"idoso",       label:"Idoso (≥ 60)"},
+  {id:"viagem",      label:"✈ Viagem"},
+];
+
+let vaccFiltro = "all";
+
+function initVacc() {
+  // Filtros
+  const fc = document.getElementById("vacc-filters");
+  fc.innerHTML = FAIXAS.map(f =>
+    `<button class="vf-btn ${f.id==="all"?"active":""}" onclick="setVaccFiltro('${f.id}')">${f.label}</button>`
+  ).join("");
+
+  // Timeline
+  const tl = document.getElementById("vacc-timeline");
+  tl.innerHTML = CAL.map(m => `
+    <div class="vacc-card" id="vc-${m.id}" data-faixa="${m.faixa}">
+      <div class="vacc-card-head" onclick="toggleVacc('${m.id}')">
+        <div class="age-pill">${m.age}</div>
+        <div class="vacc-card-title">${m.vacinas.length} vacina${m.vacinas.length>1?"s":""}</div>
+        <div class="vacc-card-count">${m.vacinas.map(v=>v.nome.split(" ")[0]).slice(0,3).join(" · ")}${m.vacinas.length>3?" …":""}</div>
+        <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="vacc-card-body">
+        ${m.vacinas.map(v=>`
+          <div class="vacc-item">
+            <div class="vacc-dot dot-${v.tipo}"></div>
+            <div class="vacc-item-info">
+              <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:2px;">
+                <div class="vacc-nome">${v.nome}</div>
+                ${v.status ? `<span class="vacc-status ${v.status==="obrigat"?"status-obrig":"status-rec"}">${v.status==="obrigat"?"Obrigatória":"Recomendada"}</span>` : ""}
+              </div>
+              <div class="vacc-doenca">${v.doenca}</div>
+              ${v.paises ? `<div class="pais-tags">${v.paises.map(p=>`<span class="pais-tag">${p}</span>`).join("")}</div>` : ""}
+            </div>
+            <div class="vacc-dose-tag tipo-${v.tipo}" style="margin-top:2px">${v.dose}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
+function setVaccFiltro(f) {
+  vaccFiltro = f;
+  document.querySelectorAll(".vf-btn").forEach((b,i)=>b.classList.toggle("active", FAIXAS[i].id===f));
+  document.querySelectorAll(".vacc-card").forEach(c=>{
+    c.classList.toggle("hidden", f!=="all" && c.dataset.faixa!==f);
+  });
+}
+
+function toggleVacc(id) {
+  const card = document.getElementById("vc-"+id);
+  card.classList.toggle("open");
+}
+
+// ════════════════════════════════════════
+// TEMA
+// ════════════════════════════════════════
+function toggleTheme() {
+  const r=document.documentElement, c=r.getAttribute("data-theme");
+  if (c==="dark")       { r.setAttribute("data-theme","light"); document.getElementById("ti").textContent="☾"; }
+  else if (c==="light") { r.removeAttribute("data-theme");      document.getElementById("ti").textContent="◑"; }
+  else                  { r.setAttribute("data-theme","dark");  document.getElementById("ti").textContent="☀"; }
+}
+
+// ── Init ──
+document.getElementById("t-conc").value=2.5;
+updFator();
+onMedChange();
+initVacc();
+</script>
