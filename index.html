@@ -66,7 +66,7 @@ body{background:linear-gradient(160deg,#071210 0%,#0B1A12 40%,#122A18 100%);back
 .lang-btn.active{background:var(--accent-g);border-color:var(--accent-b);color:var(--accent)}
 
 /* ── Tabs ── */
-.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:5px;margin-bottom:20px;width:100%;max-width:500px;gap:4px}
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:5px;margin-bottom:20px;width:100%;max-width:500px;gap:4px}
 .tab-btn{background:none;border:none;border-radius:10px;color:var(--muted);font-family:var(--sans);font-size:12px;font-weight:500;padding:9px 6px;cursor:pointer;transition:background .15s,color .15s;display:flex;flex-direction:column;align-items:center;gap:2px}
 .tab-btn .ti{font-size:17px;line-height:1}
 .tab-btn.active{background:var(--accent-g);color:var(--accent);outline:1px solid var(--accent-b)}
@@ -139,17 +139,39 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .res-cell.off .rc-lbl,.res-cell.off .rc-val,.res-cell.off .rc-un{color:var(--muted)}
 
 /* Conv 2-col */
-.res-2{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end;margin-bottom:14px}
-.res-pair{display:flex;flex-direction:column;gap:7px}
-.unit-badge{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center}
-.swap-col{display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px}
-.swap-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer;padding:9px;display:flex;transition:all .14s}
-.swap-btn:hover{background:var(--accent-g);border-color:var(--accent-b);color:var(--accent)}
-.big-result{background:linear-gradient(135deg,var(--accent-g),transparent);border:1px solid var(--accent-b);border-radius:12px;padding:16px 18px;text-align:center;min-height:68px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:10px}
-.big-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);opacity:.65;margin-bottom:5px}
-.big-val{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--accent);font-variant-numeric:tabular-nums}
-.big-un{font-size:13px;color:var(--accent);opacity:.65;margin-left:4px}
+/* Conversor — novo layout input único */
+.conv-input-wrap{display:flex;gap:0;margin-bottom:14px;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .14s}
+.conv-input-wrap:focus-within{border-color:var(--accent-b)}
+.conv-main-input{border:none!important;border-radius:0!important;flex:1;background:var(--surface2);font-family:var(--mono);font-size:22px;padding:14px 16px;outline:none;color:var(--text);min-width:0}
+.conv-main-input::placeholder{color:var(--dim);font-size:18px}
+.conv-unit-toggle{background:var(--surface);border:none;border-left:1.5px solid var(--border);padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:7px;color:var(--accent);font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:.04em;white-space:nowrap;transition:background .14s;flex-shrink:0}
+.conv-unit-toggle:hover{background:var(--accent-g)}
+.conv-result-card{background:linear-gradient(135deg,var(--accent-g),transparent 80%);border:1px solid var(--accent-b);border-radius:12px;padding:18px 20px;text-align:center;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:10px;gap:4px}
+.big-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);opacity:.65;margin-bottom:4px}
+.big-val{font-family:var(--mono);font-size:32px;font-weight:500;color:var(--accent);font-variant-numeric:tabular-nums}
+.big-un{font-size:14px;color:var(--accent);opacity:.65;margin-left:5px}
+.big-sub{font-size:12px;color:var(--muted);margin-top:3px}
 .empty-hint{color:var(--dim);font-size:12.5px}
+
+/* ── Diluição ── */
+.dil-dose-row{display:flex;gap:8px;margin-bottom:0}
+.dil-dose-row .input-base{flex:1;min-width:0}
+.dil-unit-sel{background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--sans);font-size:13px;padding:10px 10px;cursor:pointer;flex-shrink:0;width:90px}
+.dil-unit-sel:focus{outline:none;border-color:var(--accent-b)}
+.dil-vol-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.dil-chip{background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer;font-size:12px;font-weight:500;padding:6px 12px;transition:all .13s}
+.dil-chip.active,.dil-chip:hover{background:var(--accent-g);border-color:var(--accent-b);color:var(--accent)}
+.dil-result{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.dil-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:3px}
+.dil-card.accent{background:linear-gradient(135deg,var(--accent-g),transparent 80%);border-color:var(--accent-b)}
+.dil-card-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dil-card.accent .dil-card-lbl{color:var(--accent);opacity:.7}
+.dil-card-val{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--text);font-variant-numeric:tabular-nums;line-height:1.1}
+.dil-card.accent .dil-card-val{color:var(--accent)}
+.dil-card-un{font-size:11px;color:var(--muted)}
+.dil-card.accent .dil-card-un{color:var(--accent);opacity:.65}
+.dil-instr{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.7;color:var(--text);margin-bottom:10px}
+.dil-instr strong{color:var(--accent)}
 
 /* Warn */
 .warn-box{background:var(--warn-g);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);border-radius:8px;padding:9px 13px;font-size:12px;color:var(--warn);line-height:1.55;margin-bottom:10px;display:none}
@@ -204,7 +226,8 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
 .status-obrig{background:rgba(239,80,80,.14);color:#EF5050;border:1px solid rgba(239,80,80,.35)}
 .status-rec{background:var(--accent-g);color:var(--accent);border:1px solid var(--accent-b)}
 .pais-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-.pais-tag{font-size:10.5px;font-weight:500;background:var(--surface2);border:1px solid var(--border);border-radius:4px;color:var(--muted);padding:2px 7px}
+.cont-tag{font-size:10.5px;font-weight:600;background:var(--accent-g);border:1px solid var(--accent-b);border-radius:6px;color:var(--accent);padding:3px 9px;text-decoration:none;transition:all .13s;letter-spacing:.02em}
+.cont-tag:hover{background:var(--accent-b);color:#fff}
 
 /* ── Rodapé ── */
 .footer{margin-top:20px;font-size:11px;color:var(--dim);text-align:center;line-height:1.8}
@@ -449,15 +472,111 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="setTab('dose')" id="tab-dose"><span class="ti">⚖️</span><span data-i18n="tab_dose">Dose por Peso</span></button>
-  <button class="tab-btn" onclick="setTab('conv')" id="tab-conv"><span class="ti">💉</span><span data-i18n="tab_conv">Conversor UI ↔ mg</span></button>
+  <button class="tab-btn active" onclick="setTab('dil')" id="tab-dil"><span class="ti">🧪</span><span data-i18n="tab_dil">Diluição</span></button>
+  <button class="tab-btn" onclick="setTab('dose')" id="tab-dose"><span class="ti">⚖️</span><span data-i18n="tab_dose">Dose por Peso</span></button>
+  <button class="tab-btn" onclick="setTab('conv')" id="tab-conv"><span class="ti">💉</span><span data-i18n="tab_conv">Conversor UI</span></button>
   <button class="tab-btn" onclick="setTab('vacc')" id="tab-vacc"><span class="ti">🩺</span><span data-i18n="tab_vacc">Vacinas</span></button>
 </div>
 
 <div class="card">
 
+<!-- ── DILUIÇÃO IV ── -->
+<div class="panel active" id="panel-dil">
+  <!-- Medicamento -->
+  <div class="field">
+    <div class="fl" data-i18n="dil_med_label">Medicamento</div>
+    <div class="sel-wrap"><select id="dil-med" onchange="onDilMedChange()"></select><span class="sel-arr"><svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path class="arr" d="M1 1l5 5 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+  </div>
+  <!-- Dose total prescrita -->
+  <div class="field">
+    <div class="fl" data-i18n="dil_dose_label">Dose prescrita</div>
+    <div class="dil-dose-row">
+      <input type="number" class="input-base" id="dil-dose" placeholder="0" min="0" step="any" oninput="calcDil()">
+      <select class="dil-unit-sel" id="dil-unit" onchange="calcDil()">
+        <option value="mg">mg</option>
+        <option value="mcg">mcg</option>
+        <option value="g">g</option>
+        <option value="ui">UI</option>
+        <option value="meq">mEq</option>
+      </select>
+    </div>
+  </div>
+  <!-- Concentração do frasco -->
+  <div class="field" id="dil-conc-row">
+    <div class="fl" data-i18n="dil_conc_label">Concentração do frasco</div>
+    <div class="dil-dose-row">
+      <input type="number" class="input-base" id="dil-conc" placeholder="ex: 500" min="0" step="any" oninput="calcDil()">
+      <select class="dil-unit-sel" id="dil-conc-un" onchange="calcDil()">
+        <option value="mg">mg/mL</option>
+        <option value="mcg">mcg/mL</option>
+        <option value="g">g/mL</option>
+        <option value="ui">UI/mL</option>
+      </select>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px" id="dil-conc-hint"></div>
+  </div>
+  <!-- Volume do diluente -->
+  <div class="field">
+    <div class="fl" data-i18n="dil_vol_label">Volume do diluente</div>
+    <div class="dil-vol-chips">
+      <button class="dil-chip" onclick="setDilVol(50)">50 mL</button>
+      <button class="dil-chip active" onclick="setDilVol(100)">100 mL</button>
+      <button class="dil-chip" onclick="setDilVol(250)">250 mL</button>
+      <button class="dil-chip" onclick="setDilVol(500)">500 mL</button>
+    </div>
+    <div class="dil-dose-row" style="margin-top:8px">
+      <input type="number" class="input-base" id="dil-vol" placeholder="100" min="1" step="1" value="100" oninput="updDilVolChips();calcDil()">
+      <select class="dil-unit-sel" id="dil-dil-type" onchange="calcDil()">
+        <option value="SF">SF 0,9%</option>
+        <option value="SG">SG 5%</option>
+        <option value="RL">Ringer Lactato</option>
+        <option value="AD">Água Destilada</option>
+      </select>
+    </div>
+  </div>
+  <!-- Tempo de infusão (opcional) -->
+  <div class="field">
+    <div class="fl" data-i18n="dil_tempo_label">Tempo de infusão <span style="color:var(--muted);font-weight:400">(opcional)</span></div>
+    <div class="dil-dose-row">
+      <input type="number" class="input-base" id="dil-tempo" placeholder="—" min="1" step="1" oninput="calcDil()">
+      <select class="dil-unit-sel" id="dil-tempo-un" onchange="calcDil()">
+        <option value="min">min</option>
+        <option value="h">h</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="dil-empty" class="empty-state" data-i18n="empty_dil">Informe a dose e o volume do diluente</div>
+  <div id="dil-result" style="display:none">
+    <div class="dil-instr" id="dil-instr"></div>
+    <div class="dil-result">
+      <div class="dil-card accent">
+        <div class="dil-card-lbl" data-i18n="aspirar">Aspirar</div>
+        <div class="dil-card-val" id="dr-aspirar">—</div>
+        <div class="dil-card-un">mL do frasco</div>
+      </div>
+      <div class="dil-card accent">
+        <div class="dil-card-lbl" data-i18n="dil_conc_final">Conc. final</div>
+        <div class="dil-card-val" id="dr-conc-final">—</div>
+        <div class="dil-card-un" id="dr-conc-final-un">mg/mL</div>
+      </div>
+      <div class="dil-card" id="dr-rate-card" style="display:none">
+        <div class="dil-card-lbl" data-i18n="velocidade">Velocidade</div>
+        <div class="dil-card-val" id="dr-rate">—</div>
+        <div class="dil-card-un">mL/h</div>
+      </div>
+      <div class="dil-card" id="dr-vol-total-card">
+        <div class="dil-card-lbl" data-i18n="vol_total">Vol. total bolsa</div>
+        <div class="dil-card-val" id="dr-vol-total">—</div>
+        <div class="dil-card-un">mL</div>
+      </div>
+    </div>
+  </div>
+  <hr><div class="disclaimer"><span data-i18n="disclaimer_dil">Conferir sempre com protocolo institucional e farmacêutico responsável antes de preparar.</span></div>
+</div>
+
 <!-- ── DOSE POR PESO ── -->
-<div class="panel active" id="panel-dose">
+<div class="panel" id="panel-dose">
   <div class="field">
     <div class="fl" data-i18n="peso_label">Peso do paciente</div>
     <div class="peso-wrap"><input type="number" id="peso" placeholder="0" min="0.5" max="200" step="0.1" oninput="calcDose()"><span class="peso-kg">kg</span></div>
@@ -523,34 +642,41 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
     </select><span class="sel-arr"><svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path class="arr" d="M1 1l5 5 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
   <div id="c-std">
-    <div class="res-2">
-      <div class="res-pair">
-        <div class="fl" data-i18n="val_ui">Valor em UI</div>
-        <input type="number" class="input-base" id="c-ui" placeholder="0" min="0" step="any" oninput="calcConv('ui')">
-        <div class="unit-badge">UI / IU</div>
-      </div>
-      <div class="swap-col"><button class="swap-btn" onclick="swapConv()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-3 3M5 14l-3-3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 5H4M12 11H2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div>
-      <div class="res-pair">
-        <div class="fl" data-i18n="val_mg">Valor em mg</div>
-        <input type="number" class="input-base" id="c-mg" placeholder="0" min="0" step="any" oninput="calcConv('mg')">
-        <div class="unit-badge">mg</div>
-      </div>
+    <div class="conv-input-wrap">
+      <input type="number" class="input-base conv-main-input" id="c-val" placeholder="0" min="0" step="any" oninput="calcConv()">
+      <button class="conv-unit-toggle" id="c-unit-btn" onclick="toggleConvUnit()">
+        <span id="c-unit-lbl">UI</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 1l3 3 3-3M3 11l3-3 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="conv-result-card" id="c-result">
+      <div class="empty-hint" data-i18n="conv_empty">Digite um valor para calcular</div>
     </div>
     <div class="strip" id="c-fator"><span class="strip-label" id="c-fator-lbl">1 UI =</span><span class="strip-val" id="c-fator-val">—</span></div>
-    <div class="big-result" id="c-result"><div class="empty-hint" data-i18n="conv_empty">Digite um valor para calcular</div></div>
   </div>
   <div id="c-tirz" style="display:none">
     <div class="field">
+      <div class="fl" data-i18n="dose_label">Dose prescrita (mg)</div>
+      <div class="conc-presets" id="t-dose-chips">
+        <button class="cp-btn" onclick="setDoseTirz(2.5)">2,5</button>
+        <button class="cp-btn" onclick="setDoseTirz(5)">5</button>
+        <button class="cp-btn" onclick="setDoseTirz(7.5)">7,5</button>
+        <button class="cp-btn" onclick="setDoseTirz(10)">10</button>
+        <button class="cp-btn" onclick="setDoseTirz(12.5)">12,5</button>
+        <button class="cp-btn" onclick="setDoseTirz(15)">15</button>
+      </div>
+      <input type="number" class="input-base" id="t-dose" placeholder="ex: 5" min="0" step="0.5" oninput="updDoseChips();calcTirz()" style="margin-top:8px">
+    </div>
+    <div class="field">
       <div class="fl" data-i18n="conc_label">Concentração do frasco (mg/mL)</div>
-      <input type="number" class="input-base" id="t-conc" placeholder="5" min="0.1" step="0.1" oninput="calcTirz();updConcBtns()">
       <div class="conc-presets">
-        <button class="cp-btn active" onclick="setConc(2.5)">2,5 mg/mL</button>
-        <button class="cp-btn" onclick="setConc(5)">5 mg/mL</button>
+        <button class="cp-btn active" onclick="setConc(5)">5 mg/mL</button>
         <button class="cp-btn" onclick="setConc(10)">10 mg/mL</button>
         <button class="cp-btn" onclick="setConc(15)">15 mg/mL</button>
+        <button class="cp-btn" onclick="setConc(20)">20 mg/mL</button>
       </div>
+      <input type="number" class="input-base" id="t-conc" placeholder="mg/mL" min="0.1" step="0.1" value="5" oninput="calcTirz();updConcBtns()" style="margin-top:8px">
     </div>
-    <div class="field"><div class="fl" data-i18n="dose_label">Dose (mg)</div><input type="number" class="input-base" id="t-dose" placeholder="2.5" min="0" step="0.5" oninput="calcTirz()"></div>
     <div class="tirz-grid" id="t-res" style="display:none">
       <div class="tirz-cell"><div class="rc-lbl" data-i18n="aspirar">Aspirar</div><div class="rc-val" id="t-ml">—</div><div class="rc-un">mL</div></div>
       <div class="tirz-cell"><div class="rc-lbl" data-i18n="seringa">Seringa U-100</div><div class="rc-val" id="t-un">—</div><div class="rc-un" data-i18n="unidades">unidades</div></div>
@@ -583,7 +709,12 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
 const T = {
   pt:{
     eyebrow:"Calculadoras de Medicação",
-    tab_dose:"Dose por Peso", tab_conv:"Conversor UI ↔ mg", tab_vacc:"Vacinas",
+    tab_dil:"Diluição", tab_dose:"Dose por Peso", tab_conv:"Conversor UI", tab_vacc:"Vacinas",
+    dil_med_label:"Medicamento", dil_dose_label:"Dose prescrita", dil_conc_label:"Concentração do frasco",
+    dil_vol_label:"Volume do diluente", dil_tempo_label:"Tempo de infusão",
+    dil_conc_final:"Conc. final", velocidade:"Velocidade", vol_total:"Vol. total bolsa",
+    empty_dil:"Informe a dose e o volume do diluente",
+    disclaimer_dil:"Conferir sempre com protocolo institucional e farmacêutico responsável antes de preparar.",
     peso_label:"Peso do paciente", med_label:"Medicamento", form_label:"Formulação",
     freq_label:"Frequência", por_dose:"Por dose", volume:"Volume", gotas:"Gotas",
     gts:"gts", total_dia:"Total / dia", max_dose:"⚠ Máx. por dose",
@@ -609,7 +740,12 @@ const T = {
   },
   en:{
     eyebrow:"Medication Calculators",
-    tab_dose:"Dose by Weight", tab_conv:"IU ↔ mg Converter", tab_vacc:"Vaccines",
+    tab_dil:"Dilution", tab_dose:"Dose by Weight", tab_conv:"IU Converter", tab_vacc:"Vaccines",
+    dil_med_label:"Medication", dil_dose_label:"Prescribed dose", dil_conc_label:"Vial concentration",
+    dil_vol_label:"Diluent volume", dil_tempo_label:"Infusion time",
+    dil_conc_final:"Final conc.", velocidade:"Rate", vol_total:"Total bag vol.",
+    empty_dil:"Enter dose and diluent volume",
+    disclaimer_dil:"Always verify with institutional protocol and responsible pharmacist before preparing.",
     peso_label:"Patient weight", med_label:"Medication", form_label:"Formulation",
     freq_label:"Frequency", por_dose:"Per dose", volume:"Volume", gotas:"Drops",
     gts:"drops", total_dia:"Total / day", max_dose:"⚠ Max. per dose",
@@ -635,7 +771,12 @@ const T = {
   },
   es:{
     eyebrow:"Calculadoras de Medicación",
-    tab_dose:"Dosis por Peso", tab_conv:"Conversor UI ↔ mg", tab_vacc:"Vacunas",
+    tab_dil:"Dilución", tab_dose:"Dosis por Peso", tab_conv:"Conversor UI", tab_vacc:"Vacunas",
+    dil_med_label:"Medicamento", dil_dose_label:"Dosis prescrita", dil_conc_label:"Concentración del frasco",
+    dil_vol_label:"Volumen del diluyente", dil_tempo_label:"Tiempo de infusión",
+    dil_conc_final:"Conc. final", velocidade:"Velocidad", vol_total:"Vol. total bolsa",
+    empty_dil:"Ingrese la dosis y el volumen del diluyente",
+    disclaimer_dil:"Verificar siempre con el protocolo institucional y el farmacéutico responsable antes de preparar.",
     peso_label:"Peso del paciente", med_label:"Medicamento", form_label:"Formulación",
     freq_label:"Frecuencia", por_dose:"Por dosis", volume:"Volumen", gotas:"Gotas",
     gts:"gotas", total_dia:"Total / día", max_dose:"⚠ Máx. por dosis",
@@ -673,6 +814,7 @@ function setLang(l) {
   // optgroup labels
   document.querySelectorAll("[data-i18n-label]").forEach(el => { const v=t(el.dataset.i18nLabel); if(v) el.label=v; });
   // rebuild dynamic sections
+  buildDilSelect();
   buildMedSelect();
   buildVaccFilters();
   buildVaccLegend();
@@ -971,41 +1113,55 @@ const SUBST={
   vit_e_nat:    {mgUI:0.67,nota:"1 UI = 0,67 mg d-alfa-tocoferol"},
   vit_e_sin:    {mgUI:0.91,nota:"1 UI = 0,91 mg dl-alfa-tocoferol"},
 };
-let cActiveField=null;
+let cConvUnit="ui";
 
 function onSubstChange(){
   const v=document.getElementById("subst").value, isTirz=v==="tirzepatida";
   document.getElementById("c-std").style.display=isTirz?"none":"";
   document.getElementById("c-tirz").style.display=isTirz?"":"none";
-  if(!isTirz){ updFator(); calcConv(null); }
+  if(!isTirz){ updFator(); calcConv(); }
 }
 function updFator(){
   const s=SUBST[document.getElementById("subst").value]; if(!s)return;
-  const val=s.menor?`${fmtN(s.menor.f)} ${s.menor.un}  (${fmtN(s.mgUI,8)} mg)`:`${fmtN(s.mgUI,8)} mg`;
+  const val=s.menor?`${fmtN(s.menor.f)} ${s.menor.un} (${fmtN(s.mgUI,8)} mg)`:`${fmtN(s.mgUI,8)} mg`;
   document.getElementById("c-fator-val").textContent=val;
+  document.getElementById("c-fator-lbl").textContent="1 UI =";
 }
-function calcConv(from){
-  if(from) cActiveField=from;
+function toggleConvUnit(){
+  cConvUnit=cConvUnit==="ui"?"mg":"ui";
+  document.getElementById("c-unit-lbl").textContent=cConvUnit==="ui"?"UI":"mg";
+  document.getElementById("c-val").value="";
+  document.getElementById("c-result").innerHTML=`<div class="empty-hint">${t("conv_empty")}</div>`;
+  document.getElementById("c-val").focus();
+}
+function calcConv(){
   const s=SUBST[document.getElementById("subst").value]; if(!s)return;
-  const ui=document.getElementById("c-ui"), mg=document.getElementById("c-mg"), rb=document.getElementById("c-result");
-  const eq=t("equiv");
-  if(cActiveField==="ui"){
-    const v=parseFloat(ui.value); mg.classList.remove("computed");
-    if(isNaN(v)||v<0){ mg.value=""; rb.innerHTML=`<div class="empty-hint">${t("conv_empty")}</div>`; return; }
-    const r=v*s.mgUI; mg.value=fmtInput(r); mg.classList.add("computed");
-    const ex=s.menor?`<span class="big-un">(${fmtN(v*s.menor.f,4)} ${s.menor.un})</span>`:"";
-    rb.innerHTML=`<div class="big-lbl">${fmtN(v)} UI ${eq}</div><div><span class="big-val">${fmtN(r,6)}</span><span class="big-un"> mg</span> ${ex}</div>`;
-  } else if(cActiveField==="mg"){
-    const v=parseFloat(mg.value); ui.classList.remove("computed");
-    if(isNaN(v)||v<0){ ui.value=""; rb.innerHTML=`<div class="empty-hint">${t("conv_empty")}</div>`; return; }
-    const r=v/s.mgUI; ui.value=fmtInput(r); ui.classList.add("computed");
-    rb.innerHTML=`<div class="big-lbl">${fmtN(v,6)} mg ${eq}</div><div><span class="big-val">${fmtN(r,4)}</span><span class="big-un"> UI</span></div>`;
-  } else rb.innerHTML=`<div class="empty-hint">${t("conv_empty")}</div>`;
+  const v=parseFloat(document.getElementById("c-val").value);
+  const rb=document.getElementById("c-result");
+  if(isNaN(v)||v<0){ rb.innerHTML=`<div class="empty-hint">${t("conv_empty")}</div>`; return; }
+  if(cConvUnit==="ui"){
+    const r=v*s.mgUI;
+    const sub=s.menor?`<div class="big-sub">${fmtN(v*s.menor.f,4)} ${s.menor.un}</div>`:"";
+    rb.innerHTML=`<div class="big-lbl">${fmtN(v,4)} UI ${t("equiv")}</div><div><span class="big-val">${fmtN(r,6)}</span><span class="big-un">mg</span></div>${sub}`;
+  } else {
+    const r=v/s.mgUI;
+    rb.innerHTML=`<div class="big-lbl">${fmtN(v,6)} mg ${t("equiv")}</div><div><span class="big-val">${fmtN(r,4)}</span><span class="big-un">UI</span></div>`;
+  }
 }
-function swapConv(){ cActiveField=cActiveField==="ui"?"mg":"ui"; document.getElementById(cActiveField==="ui"?"c-mg":"c-ui").focus(); }
 
+function setDoseTirz(v){
+  document.getElementById("t-dose").value=v;
+  updDoseChips(); calcTirz();
+}
+function updDoseChips(){
+  const v=parseFloat(document.getElementById("t-dose").value);
+  document.querySelectorAll("#t-dose-chips .cp-btn").forEach(b=>b.classList.toggle("active",parseFloat(b.textContent)===v));
+}
 function setConc(v){ document.getElementById("t-conc").value=v; updConcBtns(); calcTirz(); }
-function updConcBtns(){ const v=parseFloat(document.getElementById("t-conc").value); document.querySelectorAll(".cp-btn").forEach(b=>b.classList.toggle("active",parseFloat(b.textContent)===v)); }
+function updConcBtns(){
+  const v=parseFloat(document.getElementById("t-conc").value);
+  document.querySelectorAll("#c-tirz .conc-presets:last-of-type .cp-btn").forEach(b=>b.classList.toggle("active",parseFloat(b.textContent)===v));
+}
 function calcTirz(){
   const dose=parseFloat(document.getElementById("t-dose").value),conc=parseFloat(document.getElementById("t-conc").value);
   const res=document.getElementById("t-res"),emp=document.getElementById("t-empty");
@@ -1103,43 +1259,43 @@ const CAL=[
     {nome:"Febre Amarela / Yellow Fever / Fiebre Amarilla",
      doenca:{pt:"Exigida na fronteira de países endêmicos e por países que recebem viajantes de zonas de risco",en:"Required at the border of endemic countries and by countries receiving travelers from risk zones",es:"Requerida en la frontera de países endémicos y por países que reciben viajeros de zonas de riesgo"},
      dose:{pt:"Dose única (certificado vitalício)",en:"Single dose (lifelong certificate)",es:"Dosis única (certificado de por vida)"},tipo:"viral",status:"obrigat",
-     paises:["Angola","Benin","Burkina Faso","Burundi","Camarões / Cameroon","Congo (RDC)","Costa do Marfim / Ivory Coast","Gabão / Gabon","Gana / Ghana","Guiné / Guinea","Mali","Níger / Niger","Nigéria / Nigeria","Ruanda / Rwanda","Senegal","São Tomé e Príncipe","Togo","Uganda","Bolívia — Amazônia","Peru — Amazônia","Equador — Amazônia"]},
+     continentes:["África","América do Sul"],fonte:"https://wwwnc.cdc.gov/travel/diseases/yellow-fever"},
     {nome:"Hepatite A / Hepatitis A",
      doenca:{pt:"Transmitida por água/alimentos contaminados — alto risco em destinos com saneamento precário",en:"Transmitted via contaminated water/food — high risk in destinations with poor sanitation",es:"Transmitida por agua/alimentos contaminados — alto riesgo en destinos con saneamiento precario"},
      dose:{pt:"2 doses (0 e 6–12 meses)",en:"2 doses (0 and 6–12 months)",es:"2 dosis (0 y 6–12 meses)"},tipo:"viral",status:"recom",
-     paises:["África (geral)","Ásia do Sul / South Asia","Índia / India","Bangladesh","Paquistão / Pakistan","América Central","México / Mexico","Haiti","Peru","Colômbia / Colombia"]},
+     continentes:["África","Ásia","América Central","América do Sul"],fonte:"https://wwwnc.cdc.gov/travel/diseases/hepatitis-a"},
     {nome:"Hepatite B / Hepatitis B",
      doenca:{pt:"Risco para estadias longas, procedimentos médicos ou exposição sexual",en:"Risk for long stays, medical procedures or sexual exposure",es:"Riesgo para estancias largas, procedimientos médicos o exposición sexual"},
      dose:{pt:"3 doses (0, 1 e 6 meses)",en:"3 doses (0, 1 and 6 months)",es:"3 dosis (0, 1 y 6 meses)"},tipo:"viral",status:"recom",
-     paises:["África Subsaariana","Ásia Oriental / East Asia","China","Vietnã / Vietnam","Tailândia / Thailand","Indonésia / Indonesia","Papua-Nova Guiné","Mongólia / Mongolia"]},
+     continentes:["África","Ásia","Oceania"],fonte:"https://wwwnc.cdc.gov/travel/diseases/hepatitis-b"},
     {nome:"Febre Tifoide / Typhoid / Fiebre Tifoidea",
      doenca:{pt:"Salmonella typhi — transmitida por água e alimentos contaminados",en:"Salmonella typhi — transmitted via contaminated water and food",es:"Salmonella typhi — transmitida por agua y alimentos contaminados"},
      dose:{pt:"Oral: 4 cápsulas (dias 1/3/5/7) · Injetável: dose única",en:"Oral: 4 capsules (days 1/3/5/7) · Injectable: single dose",es:"Oral: 4 cápsulas (días 1/3/5/7) · Inyectable: dosis única"},tipo:"bact",status:"recom",
-     paises:["Índia / India","Nepal","Bangladesh","Paquistão / Pakistan","Indonésia / Indonesia","Filipinas / Philippines","África Oriental","África Ocidental","Haiti","Peru"]},
+     continentes:["Ásia","África","América Central","América do Sul"],fonte:"https://wwwnc.cdc.gov/travel/diseases/typhoid"},
     {nome:"Meningocócica ACWY",
      doenca:{pt:"Obrigatória para peregrinação islâmica e países do 'cinturão da meningite'",en:"Required for Islamic pilgrimage and countries in the 'meningitis belt'",es:"Obligatoria para la peregrinación islámica y países del 'cinturón de la meningitis'"},
      dose:{pt:"Dose única (reforço a cada 5 anos)",en:"Single dose (booster every 5 years)",es:"Dosis única (refuerzo cada 5 años)"},tipo:"bact",status:"obrigat",
-     paises:["Arábia Saudita — Hajj / Umra","Burkina Faso","Chade / Chad","Etiópia / Ethiopia","Gana / Ghana","Mali","Níger / Niger","Nigéria / Nigeria","Senegal","Sudão / Sudan","Togo"]},
+     continentes:["África","Oriente Médio"],fonte:"https://wwwnc.cdc.gov/travel/diseases/meningococcal"},
     {nome:"Raiva / Rabies / Rabia (pré-exposição)",
      doenca:{pt:"Aventureiros, ciclistas, trabalho com animais, áreas remotas sem imunoglobulina",en:"Adventurers, cyclists, animal workers, remote areas without immunoglobulin",es:"Aventureros, ciclistas, trabajadores con animales, zonas remotas sin inmunoglobulina"},
      dose:{pt:"3 doses (dias 0, 7 e 21)",en:"3 doses (days 0, 7 and 21)",es:"3 dosis (días 0, 7 y 21)"},tipo:"viral",status:"recom",
-     paises:["Índia / India","Nepal","Tailândia / Thailand","Vietnã / Vietnam","Filipinas / Philippines","Indonésia / Indonesia","China","África Subsaariana","Haiti","Bolívia rural","Peru rural"]},
+     continentes:["Ásia","África","América Central","América do Sul"],fonte:"https://wwwnc.cdc.gov/travel/diseases/rabies"},
     {nome:"Encefalite Japonesa / Japanese Encephalitis",
      doenca:{pt:"Vírus transmitido por mosquito Culex — risco em áreas rurais/arrozais, estadia > 1 mês",en:"Culex mosquito-borne virus — risk in rural/rice field areas, stay > 1 month",es:"Virus transmitido por mosquito Culex — riesgo en zonas rurales/arrozales, estancia > 1 mes"},
      dose:{pt:"2 doses (dias 0 e 28)",en:"2 doses (days 0 and 28)",es:"2 dosis (días 0 y 28)"},tipo:"viral",status:"recom",
-     paises:["China","Japão / Japan","Coreia / Korea","Vietnã / Vietnam","Tailândia / Thailand","Camboja / Cambodia","Laos","Myanmar","Índia / India","Nepal","Malásia / Malaysia","Filipinas / Philippines"]},
+     continentes:["Ásia"],fonte:"https://wwwnc.cdc.gov/travel/diseases/japanese-encephalitis"},
     {nome:"Encefalite por Carrapato / TBE",
      doenca:{pt:"Vírus transmitido por Ixodes — atividades ao ar livre em florestas da Europa e Ásia",en:"Ixodes tick-borne virus — outdoor activities in European and Asian forests",es:"Virus transmitido por Ixodes — actividades al aire libre en bosques de Europa y Asia"},
      dose:{pt:"3 doses (0, 1–3 e 5–12 meses)",en:"3 doses (0, 1–3 and 5–12 months)",es:"3 dosis (0, 1–3 y 5–12 meses)"},tipo:"viral",status:"recom",
-     paises:["Áustria / Austria","Rep. Tcheca / Czech Rep.","Alemanha / Germany","Suíça / Switzerland","Polônia / Poland","Países Bálticos","Suécia / Sweden","Finlândia / Finland","Rússia / Russia","China (nordeste)"]},
+     continentes:["Europa","Ásia"],fonte:"https://wwwnc.cdc.gov/travel/diseases/tickborne-encephalitis"},
     {nome:"Cólera / Cholera",
      doenca:{pt:"Principalmente para trabalhadores humanitários em áreas com surto ativo",en:"Mainly for humanitarian workers in areas with active outbreak",es:"Principalmente para trabajadores humanitarios en zonas con brote activo"},
      dose:{pt:"Oral: 2 doses com 1–6 semanas de intervalo",en:"Oral: 2 doses 1–6 weeks apart",es:"Oral: 2 dosis con 1–6 semanas de intervalo"},tipo:"bact",status:"recom",
-     paises:["Haiti","Iêmen / Yemen","Bangladesh","Moçambique / Mozambique","Etiópia / Ethiopia","Sudão do Sul / South Sudan","Congo (RDC)","Zimbabwe"]},
+     continentes:["África","Ásia","América Central","Oriente Médio"],fonte:"https://wwwnc.cdc.gov/travel/diseases/cholera"},
     {nome:"Influenza / Influenza / Gripe",
      doenca:{pt:"Circulação sazonal diferente nos hemisférios — atualizar antes de viagens longas",en:"Different seasonal circulation in each hemisphere — update before long trips",es:"Circulación estacional diferente en hemisferios — actualizar antes de viajes largos"},
      dose:{pt:"Anual (cepa da estação do destino)",en:"Annual (destination season strain)",es:"Anual (cepa de la estación del destino)"},tipo:"viral",status:"recom",
-     paises:["Qualquer destino / Any destination","América do Sul: abr–set","Europa / América do Norte: out–mar","Trópicos: circulação anual"]},
+     continentes:["Global"],fonte:"https://wwwnc.cdc.gov/travel/diseases/influenza"},
   ]},
 ];
 
@@ -1190,7 +1346,7 @@ function buildVaccTimeline(){
                 ${v.status?`<span class="vacc-status ${v.status==="obrigat"?"status-obrig":"status-rec"}">${t(v.status)}</span>`:""}
               </div>
               <div class="vacc-doenca">${ageStr(v.doenca)}</div>
-              ${v.paises?`<div class="pais-tags">${v.paises.map(p=>`<span class="pais-tag">${p}</span>`).join("")}</div>`:""}
+              ${v.continentes?`<div class="pais-tags">${v.continentes.map(c=>`<a class="cont-tag" href="${v.fonte||'#'}" target="_blank" rel="noopener" title="Ver mais: CDC Travel">${c} ↗</a>`).join("")}</div>`:""}
             </div>
             <div class="vacc-dose-tag tipo-${v.tipo}">${doseStr(v.dose)}</div>
           </div>`).join("")}
@@ -1209,9 +1365,134 @@ function setVaccFiltro(f){
 function toggleVacc(id){ document.getElementById("vc-"+id).classList.toggle("open"); }
 
 // ══════════════════════════════════════════════════
+// DILUIÇÃO IV
+// ══════════════════════════════════════════════════
+const MEDS_DIL = {
+  "_outro": {nome:{pt:"Outro (digitar)",en:"Other (custom)",es:"Otro (personalizado)"},un:"mg",concFrasco:null,concHint:""},
+  // Antibióticos
+  amox_dil:   {nome:{pt:"Amoxicilina + Clavulanato (Amoxil® IV)",en:"Amoxicillin + Clavulanate",es:"Amoxicilina + Clavulanato"},grp:"antib",un:"mg",concFrasco:10,concHint:"Frasco 1000mg/100mL após reconstituição"},
+  oxacilina:  {nome:{pt:"Oxacilina",en:"Oxacillin",es:"Oxacilina"},grp:"antib",un:"mg",concFrasco:null,concHint:"Frasco 500mg ou 1g — diluir em 10 mL (50 mg/mL)"},
+  penic_g:    {nome:{pt:"Penicilina G Cristalina",en:"Penicillin G",es:"Penicilina G"},grp:"antib",un:"ui",concFrasco:null,concHint:"Frasco 5.000.000 UI — diluir em 50–100 mL"},
+  ceftriax:   {nome:{pt:"Ceftriaxona",en:"Ceftriaxone",es:"Ceftriaxona"},grp:"antib",un:"mg",concFrasco:null,concHint:"Frasco 1g — diluir em 10 mL (100 mg/mL) para bolus"},
+  vanc:       {nome:{pt:"Vancomicina",en:"Vancomycin",es:"Vancomicina"},grp:"antib",un:"mg",concFrasco:5,concHint:"Reconstituir: 500mg/10mL = 50 mg/mL; diluir para ≤5 mg/mL"},
+  metro_dil:  {nome:{pt:"Metronidazol (Flagyl® IV)",en:"Metronidazole IV",es:"Metronidazol IV"},grp:"antib",un:"mg",concFrasco:5,concHint:"Frasco pronto 500mg/100mL = 5 mg/mL"},
+  cipro_dil:  {nome:{pt:"Ciprofloxacino IV",en:"Ciprofloxacin IV",es:"Ciprofloxacino IV"},grp:"antib",un:"mg",concFrasco:2,concHint:"Frasco pronto 200mg/100mL = 2 mg/mL"},
+  // Analgésicos / Sedação
+  dipi_dil:   {nome:{pt:"Dipirona IV",en:"Metamizole IV",es:"Dipirona IV"},grp:"analg",un:"mg",concFrasco:500,concHint:"Ampola 1g/2mL = 500 mg/mL"},
+  morfina:    {nome:{pt:"Morfina",en:"Morphine",es:"Morfina"},grp:"analg",un:"mg",concFrasco:10,concHint:"Ampola 10mg/mL"},
+  fentanila:  {nome:{pt:"Fentanila",en:"Fentanyl",es:"Fentanilo"},grp:"analg",un:"mcg",concFrasco:50,concHint:"Ampola 50 mcg/mL (0,05 mg/mL)"},
+  tramadol:   {nome:{pt:"Tramadol",en:"Tramadol",es:"Tramadol"},grp:"analg",un:"mg",concFrasco:50,concHint:"Ampola 100mg/2mL = 50 mg/mL"},
+  midazo:     {nome:{pt:"Midazolam",en:"Midazolam",es:"Midazolam"},grp:"analg",un:"mg",concFrasco:5,concHint:"Ampola 15mg/3mL = 5 mg/mL"},
+  // Cardiovascular / Vasoativos
+  dopamina:   {nome:{pt:"Dopamina",en:"Dopamine",es:"Dopamina"},grp:"cardio",un:"mg",concFrasco:5,concHint:"Ampola 50mg/10mL = 5 mg/mL"},
+  dobutamina: {nome:{pt:"Dobutamina",en:"Dobutamine",es:"Dobutamina"},grp:"cardio",un:"mg",concFrasco:12.5,concHint:"Ampola 250mg/20mL = 12,5 mg/mL"},
+  noradren:   {nome:{pt:"Noradrenalina",en:"Norepinephrine",es:"Noradrenalina"},grp:"cardio",un:"mg",concFrasco:1,concHint:"Ampola 8mg/8mL = 1 mg/mL (ou 4mg/4mL)"},
+  amiodar:    {nome:{pt:"Amiodarona",en:"Amiodarone",es:"Amiodarona"},grp:"cardio",un:"mg",concFrasco:50,concHint:"Ampola 150mg/3mL = 50 mg/mL"},
+  furose_dil: {nome:{pt:"Furosemida",en:"Furosemide",es:"Furosemida"},grp:"cardio",un:"mg",concFrasco:10,concHint:"Ampola 20mg/2mL = 10 mg/mL"},
+  // Corticoides
+  hidrocort:  {nome:{pt:"Hidrocortisona",en:"Hydrocortisone",es:"Hidrocortisona"},grp:"corti",un:"mg",concFrasco:null,concHint:"Frasco 100mg ou 500mg — reconstituir em 2–10 mL"},
+  dexame_dil: {nome:{pt:"Dexametasona",en:"Dexamethasone",es:"Dexametasona"},grp:"corti",un:"mg",concFrasco:4,concHint:"Ampola 4mg/mL ou 10mg/mL"},
+  // Antieméticos / Outros
+  ondanse:    {nome:{pt:"Ondansetrona",en:"Ondansetron",es:"Ondansetrón"},grp:"outros",un:"mg",concFrasco:2,concHint:"Ampola 4mg/2mL = 2 mg/mL"},
+  omepraz_dil:{nome:{pt:"Omeprazol IV",en:"Omeprazole IV",es:"Omeprazol IV"},grp:"outros",un:"mg",concFrasco:null,concHint:"Frasco 40mg — reconstituir em 5 mL (8 mg/mL)"},
+  kcl:        {nome:{pt:"Cloreto de Potássio (KCl 19,1%)",en:"Potassium Chloride",es:"Cloruro de Potasio"},grp:"outros",un:"meq",concFrasco:2.55,concHint:"Ampola 10mL = 25,5 mEq (2,55 mEq/mL) — NUNCA em bolus"},
+};
+
+function buildDilSelect(){
+  const grps={antib:"Antibióticos",analg:"Analgésicos / Sedação",cardio:"Cardiovascular / Vasoativos",corti:"Corticoides",outros:"Outros"};
+  const sel=document.getElementById("dil-med");
+  let html=`<option value="_outro">Outro (digitar)</option>`;
+  Object.entries(grps).forEach(([g,lbl])=>{
+    const items=Object.entries(MEDS_DIL).filter(([k,v])=>v.grp===g);
+    if(!items.length)return;
+    html+=`<optgroup label="${lbl}">${items.map(([k,v])=>`<option value="${k}">${v.nome[lang]||v.nome.pt}</option>`).join("")}</optgroup>`;
+  });
+  sel.innerHTML=html;
+}
+
+function onDilMedChange(){
+  const k=document.getElementById("dil-med").value, m=MEDS_DIL[k];
+  if(!m)return;
+  const concIn=document.getElementById("dil-conc");
+  const concUnSel=document.getElementById("dil-conc-un");
+  const hint=document.getElementById("dil-conc-hint");
+  if(m.concFrasco){concIn.value=m.concFrasco;}
+  else{concIn.value="";}
+  hint.textContent=m.concHint||"";
+  // unidade padrão
+  const u=m.un||"mg";
+  document.getElementById("dil-unit").value=u;
+  // sincroniza unidade da concentração
+  const cuMap={mg:"mg",mcg:"mcg",g:"g",ui:"ui",meq:"mg"};
+  try{concUnSel.value=cuMap[u]||"mg";}catch(e){}
+  calcDil();
+}
+
+function setDilVol(v){
+  document.getElementById("dil-vol").value=v;
+  updDilVolChips(); calcDil();
+}
+function updDilVolChips(){
+  const v=parseFloat(document.getElementById("dil-vol").value);
+  document.querySelectorAll(".dil-chip").forEach(b=>b.classList.toggle("active",parseFloat(b.textContent)===v));
+}
+
+function calcDil(){
+  const dose=parseFloat(document.getElementById("dil-dose").value);
+  const conc=parseFloat(document.getElementById("dil-conc").value);
+  const vol=parseFloat(document.getElementById("dil-vol").value);
+  const dilType=document.getElementById("dil-dil-type").value;
+  const tempoVal=parseFloat(document.getElementById("dil-tempo").value);
+  const tempoUn=document.getElementById("dil-tempo-un").value;
+  const unit=document.getElementById("dil-unit").value;
+
+  const empty=document.getElementById("dil-empty");
+  const result=document.getElementById("dil-result");
+
+  if(isNaN(dose)||dose<=0||isNaN(vol)||vol<=0){
+    empty.style.display=""; result.style.display="none"; return;
+  }
+  empty.style.display="none"; result.style.display="";
+
+  // Volume a aspirar do frasco
+  let aspirar=null, concFinal=null, concFinalUn=unit+"/mL";
+  if(!isNaN(conc)&&conc>0){
+    aspirar=dose/conc;
+    const volTotal=vol+aspirar;
+    concFinal=dose/volTotal;
+    document.getElementById("dr-aspirar").textContent=fmtN(aspirar,4);
+    document.getElementById("dr-vol-total").textContent=fmtN(volTotal,4);
+    document.getElementById("dr-conc-final").textContent=fmtN(concFinal,4);
+    document.getElementById("dr-conc-final-un").textContent=concFinalUn;
+
+    // Instrução legível
+    const instr=document.getElementById("dil-instr");
+    instr.innerHTML=`Aspirar <strong>${fmtN(aspirar,4)} mL</strong> do frasco e adicionar a <strong>${vol} mL de ${dilType}</strong>.<br>Volume final: <strong>${fmtN(volTotal,4)} mL</strong> · Concentração: <strong>${fmtN(concFinal,4)} ${concFinalUn}</strong>`;
+  } else {
+    document.getElementById("dr-aspirar").textContent="—";
+    document.getElementById("dr-vol-total").textContent=fmtN(vol,4);
+    document.getElementById("dr-conc-final").textContent="—";
+    const instr=document.getElementById("dil-instr");
+    instr.innerHTML=`Adicionar a dose ao diluente: <strong>${vol} mL de ${dilType}</strong>.<br>Informe a concentração do frasco para calcular o volume a aspirar.`;
+  }
+
+  // Velocidade de infusão
+  const rateCard=document.getElementById("dr-rate-card");
+  if(!isNaN(tempoVal)&&tempoVal>0){
+    const tempoH=tempoUn==="min"?tempoVal/60:tempoVal;
+    const volTotal2=(!isNaN(conc)&&conc>0)?vol+(dose/conc):vol;
+    const rate=volTotal2/tempoH;
+    document.getElementById("dr-rate").textContent=fmtN(rate,4);
+    rateCard.style.display="";
+  } else {
+    rateCard.style.display="none";
+  }
+}
+
+// ══════════════════════════════════════════════════
 // TABS + TEMA
 // ══════════════════════════════════════════════════
-function setTab(t){ ["dose","conv","vacc"].forEach(id=>{ document.getElementById("tab-"+id).classList.toggle("active",id===t); document.getElementById("panel-"+id).classList.toggle("active",id===t); }); }
+function setTab(t){ ["dil","dose","conv","vacc"].forEach(id=>{ document.getElementById("tab-"+id).classList.toggle("active",id===t); document.getElementById("panel-"+id).classList.toggle("active",id===t); }); }
 function toggleTheme(){ const r=document.documentElement,c=r.getAttribute("data-theme"); if(c==="dark"){r.setAttribute("data-theme","light");document.getElementById("ti").textContent="☾";}else if(c==="light"){r.removeAttribute("data-theme");document.getElementById("ti").textContent="◑";}else{r.setAttribute("data-theme","dark");document.getElementById("ti").textContent="☀";} }
 
 // ══════════════════════════════════════════════════
@@ -1222,11 +1503,18 @@ function fmtInput(n){ return isNaN(n)?"":n<0.000001?n.toExponential(4):parseFloa
 function fmtMg(v){ if(isNaN(v))return"—"; if(v>=100)return Math.round(v).toLocaleString("pt-BR"); if(v>=10)return v.toLocaleString("pt-BR",{maximumFractionDigits:1}); return v.toLocaleString("pt-BR",{maximumFractionDigits:2}); }
 function fmtVol(v){ if(isNaN(v))return"—"; if(v>=10)return v.toLocaleString("pt-BR",{maximumFractionDigits:1}); return v.toLocaleString("pt-BR",{maximumFractionDigits:2}); }
 
+// ── Dark mode por padrão ──
+if(!document.documentElement.getAttribute("data-theme")){
+  document.documentElement.setAttribute("data-theme","dark");
+  document.getElementById("ti").textContent="☀";
+}
+
 // ── Init ──
-document.getElementById("t-conc").value=2.5;
+buildDilSelect();
 buildMedSelect();
 onMedChange();
 updFator();
+updDilVolChips();
 buildVaccFilters();
 buildVaccLegend();
 buildVaccTimeline();
