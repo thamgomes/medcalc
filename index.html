@@ -66,8 +66,9 @@ body{background:linear-gradient(160deg,#071210 0%,#0B1A12 40%,#122A18 100%);back
 .lang-btn.active{background:var(--accent-g);border-color:var(--accent-b);color:var(--accent)}
 
 /* ── Tabs ── */
-.tabs{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:5px;margin-bottom:20px;width:100%;max-width:500px;gap:4px}
-.tab-btn{background:none;border:none;border-radius:10px;color:var(--muted);font-family:var(--sans);font-size:12px;font-weight:500;padding:9px 6px;cursor:pointer;transition:background .15s,color .15s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:5px;margin-bottom:20px;width:100%;max-width:500px;gap:4px}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{background:none;border:none;border-radius:10px;color:var(--muted);font-family:var(--sans);font-size:12px;font-weight:500;padding:9px 6px;cursor:pointer;transition:background .15s,color .15s;display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;min-width:72px;white-space:nowrap}
 .tab-btn .ti{font-size:17px;line-height:1}
 .tab-btn.active{background:var(--accent-g);color:var(--accent);outline:1px solid var(--accent-b)}
 
@@ -152,6 +153,32 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .big-un{font-size:14px;color:var(--accent);opacity:.65;margin-left:5px}
 .big-sub{font-size:12px;color:var(--muted);margin-top:3px}
 .empty-hint{color:var(--dim);font-size:12.5px}
+
+/* ── IMC ── */
+.imc-sex-row{display:flex;gap:8px;margin-bottom:0}
+.imc-sex-btn{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--muted);cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:500;padding:11px 8px;transition:all .13s;text-align:center}
+.imc-sex-btn.active{background:var(--accent-g);border-color:var(--accent-b);color:var(--accent)}
+.imc-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.imc-gauge-wrap{margin:4px 0 14px}
+.imc-gauge-track{height:10px;border-radius:6px;background:linear-gradient(to right,#4A90D9 0%,#4CC17A 22%,#F0C040 47%,#E07030 65%,#C03020 82%,#800010 100%);position:relative;margin-bottom:6px}
+.imc-gauge-pin{position:absolute;top:-4px;width:18px;height:18px;border-radius:50%;background:var(--surface);border:3px solid #fff;transform:translateX(-50%);transition:left .4s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 6px rgba(0,0,0,.4)}
+.imc-gauge-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);padding:0 2px}
+.imc-big{display:flex;align-items:baseline;gap:6px;margin-bottom:6px}
+.imc-num{font-family:var(--mono);font-size:44px;font-weight:500;line-height:1;font-variant-numeric:tabular-nums}
+.imc-un{font-size:14px;color:var(--muted)}
+.imc-cat{display:inline-block;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:14px}
+.imc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.imc-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px 15px}
+.imc-card.ideal{background:linear-gradient(135deg,var(--accent-g),transparent 80%);border-color:var(--accent-b)}
+.imc-card-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.imc-card.ideal .imc-card-lbl{color:var(--accent);opacity:.75}
+.imc-card-val{font-family:var(--mono);font-size:18px;font-weight:500;color:var(--text);font-variant-numeric:tabular-nums}
+.imc-card.ideal .imc-card-val{color:var(--accent)}
+.imc-card-un{font-size:11px;color:var(--muted);margin-top:2px}
+.imc-card.ideal .imc-card-un{color:var(--accent);opacity:.65}
+.imc-ativ-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.imc-ativ-btn{flex:1;min-width:60px;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer;font-size:11px;font-weight:500;padding:7px 4px;transition:all .13s;text-align:center}
+.imc-ativ-btn.active{background:var(--accent-g);border-color:var(--accent-b);color:var(--accent)}
 
 /* ── Diluição ── */
 .dil-dose-row{display:flex;gap:8px;margin-bottom:0}
@@ -476,6 +503,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
   <button class="tab-btn" onclick="setTab('dose')" id="tab-dose"><span class="ti">⚖️</span><span data-i18n="tab_dose">Dose por Peso</span></button>
   <button class="tab-btn" onclick="setTab('conv')" id="tab-conv"><span class="ti">💉</span><span data-i18n="tab_conv">Conversor UI</span></button>
   <button class="tab-btn" onclick="setTab('vacc')" id="tab-vacc"><span class="ti">🩺</span><span data-i18n="tab_vacc">Vacinas</span></button>
+  <button class="tab-btn" onclick="setTab('imc')" id="tab-imc"><span class="ti">⚕️</span><span data-i18n="tab_imc">IMC</span></button>
 </div>
 
 <div class="card">
@@ -695,6 +723,80 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
   <hr><div class="disclaimer"><span data-i18n="vacc_disc">Calendário PNI 2024 (Programa Nacional de Imunizações / MS). Calendários estaduais e de grupos de risco podem incluir vacinas adicionais.</span></div>
 </div>
 
+<!-- ── IMC ── -->
+<div class="panel" id="panel-imc">
+  <div class="field">
+    <div class="fl" data-i18n="imc_sex_label">Sexo biológico</div>
+    <div class="imc-sex-row">
+      <button class="imc-sex-btn active" id="imc-sex-m" onclick="setImcSex('m')">♂ Masculino</button>
+      <button class="imc-sex-btn" id="imc-sex-f" onclick="setImcSex('f')">♀ Feminino</button>
+    </div>
+  </div>
+  <div class="imc-2col">
+    <div>
+      <div class="fl" style="margin-bottom:6px" data-i18n="peso_label">Peso (kg)</div>
+      <input type="number" class="input-base" id="imc-peso" placeholder="70" min="10" max="300" step="0.1" oninput="calcIMC()">
+    </div>
+    <div>
+      <div class="fl" style="margin-bottom:6px" data-i18n="imc_alt_label">Altura (cm)</div>
+      <input type="number" class="input-base" id="imc-alt" placeholder="170" min="50" max="250" step="1" oninput="calcIMC()">
+    </div>
+  </div>
+  <div class="field">
+    <div class="fl" data-i18n="imc_age_label">Idade (anos)</div>
+    <input type="number" class="input-base" id="imc-idade" placeholder="30" min="15" max="100" step="1" oninput="calcIMC()">
+  </div>
+  <div class="field">
+    <div class="fl" data-i18n="imc_ativ_label">Nível de atividade</div>
+    <div class="imc-ativ-row">
+      <button class="imc-ativ-btn active" onclick="setImcAtiv(this,1.2)">Sedentário</button>
+      <button class="imc-ativ-btn" onclick="setImcAtiv(this,1.375)">Leve</button>
+      <button class="imc-ativ-btn" onclick="setImcAtiv(this,1.55)">Moderado</button>
+      <button class="imc-ativ-btn" onclick="setImcAtiv(this,1.725)">Intenso</button>
+    </div>
+  </div>
+  <div id="imc-empty" class="empty-state" data-i18n="empty_imc">Informe peso, altura e idade</div>
+  <div id="imc-result" style="display:none">
+    <div class="imc-gauge-wrap">
+      <div class="imc-gauge-track"><div class="imc-gauge-pin" id="imc-pin"></div></div>
+      <div class="imc-gauge-labels"><span>Magreza</span><span>Normal</span><span>Sobrepeso</span><span>Obesidade</span></div>
+    </div>
+    <div class="imc-big">
+      <span class="imc-num" id="imc-val">—</span>
+      <span class="imc-un">kg/m²</span>
+    </div>
+    <div><span class="imc-cat" id="imc-cat-badge">—</span></div>
+    <div class="imc-grid" style="margin-top:14px">
+      <div class="imc-card ideal">
+        <div class="imc-card-lbl" data-i18n="imc_ideal_range">Faixa ideal</div>
+        <div class="imc-card-val" id="imc-ideal-range">—</div>
+        <div class="imc-card-un">kg/m²</div>
+      </div>
+      <div class="imc-card ideal">
+        <div class="imc-card-lbl" data-i18n="imc_peso_ideal">Peso ideal</div>
+        <div class="imc-card-val" id="imc-peso-ideal">—</div>
+        <div class="imc-card-un">kg</div>
+      </div>
+      <div class="imc-card">
+        <div class="imc-card-lbl" data-i18n="imc_kcal_atual">Calorias atuais</div>
+        <div class="imc-card-val" id="imc-kcal-atual">—</div>
+        <div class="imc-card-un">kcal/dia</div>
+      </div>
+      <div class="imc-card">
+        <div class="imc-card-lbl" data-i18n="imc_kcal_ideal">Calorias p/ IMC ideal</div>
+        <div class="imc-card-val" id="imc-kcal-ideal">—</div>
+        <div class="imc-card-un">kcal/dia</div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="disclaimer">
+    Faixas de IMC segundo a <a href="https://abeso.org.br/diretrizes/" target="_blank" rel="noopener" style="color:var(--muted)">ABESO</a> e <a href="https://www.who.int/europe/news-room/fact-sheets/item/a-healthy-lifestyle---who-recommendations" target="_blank" rel="noopener" style="color:var(--muted)">OMS</a>.<br>
+    Calorias calculadas pela <a href="https://pubmed.ncbi.nlm.nih.gov/2305711/" target="_blank" rel="noopener" style="color:var(--muted)">equação de Mifflin-St Jeor</a> (Am J Clin Nutr, 1990).<br>
+    IMC é uma estimativa populacional — não substitui avaliação clínica individualizada.
+  </div>
+</div>
+
 </div><!-- /card -->
 
 <div class="footer">
@@ -709,7 +811,12 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
 const T = {
   pt:{
     eyebrow:"Calculadoras de Medicação",
-    tab_dil:"Diluição", tab_dose:"Dose por Peso", tab_conv:"Conversor UI", tab_vacc:"Vacinas",
+    tab_dil:"Diluição", tab_imc:"IMC", tab_dose:"Dose por Peso", tab_conv:"Conversor UI", tab_vacc:"Vacinas",
+    imc_sex_label:"Sexo biológico", imc_alt_label:"Altura (cm)", imc_age_label:"Idade (anos)",
+    imc_ativ_label:"Nível de atividade", imc_ideal_range:"Faixa ideal", imc_peso_ideal:"Peso ideal",
+    imc_kcal_atual:"Calorias atuais", imc_kcal_ideal:"Calorias p/ IMC ideal",
+    empty_imc:"Informe peso, altura e idade",
+    disclaimer_imc:"IMC é uma estimativa populacional — não substitui avaliação clínica individualizada. Calorias calculadas pela equação de Mifflin-St Jeor.",
     dil_med_label:"Medicamento", dil_dose_label:"Dose prescrita", dil_conc_label:"Concentração do frasco",
     dil_vol_label:"Volume do diluente", dil_tempo_label:"Tempo de infusão",
     dil_conc_final:"Conc. final", velocidade:"Velocidade", vol_total:"Vol. total bolsa",
@@ -740,7 +847,12 @@ const T = {
   },
   en:{
     eyebrow:"Medication Calculators",
-    tab_dil:"Dilution", tab_dose:"Dose by Weight", tab_conv:"IU Converter", tab_vacc:"Vaccines",
+    tab_dil:"Dilution", tab_imc:"BMI", tab_dose:"Dose by Weight", tab_conv:"IU Converter", tab_vacc:"Vaccines",
+    imc_sex_label:"Biological sex", imc_alt_label:"Height (cm)", imc_age_label:"Age (years)",
+    imc_ativ_label:"Activity level", imc_ideal_range:"Ideal range", imc_peso_ideal:"Ideal weight",
+    imc_kcal_atual:"Current calories", imc_kcal_ideal:"Calories for ideal BMI",
+    empty_imc:"Enter weight, height and age",
+    disclaimer_imc:"BMI is a population estimate — it does not replace individualized clinical assessment. Calories calculated using the Mifflin-St Jeor equation.",
     dil_med_label:"Medication", dil_dose_label:"Prescribed dose", dil_conc_label:"Vial concentration",
     dil_vol_label:"Diluent volume", dil_tempo_label:"Infusion time",
     dil_conc_final:"Final conc.", velocidade:"Rate", vol_total:"Total bag vol.",
@@ -771,7 +883,12 @@ const T = {
   },
   es:{
     eyebrow:"Calculadoras de Medicación",
-    tab_dil:"Dilución", tab_dose:"Dosis por Peso", tab_conv:"Conversor UI", tab_vacc:"Vacunas",
+    tab_dil:"Dilución", tab_imc:"IMC", tab_dose:"Dosis por Peso", tab_conv:"Conversor UI", tab_vacc:"Vacunas",
+    imc_sex_label:"Sexo biológico", imc_alt_label:"Altura (cm)", imc_age_label:"Edad (años)",
+    imc_ativ_label:"Nivel de actividad", imc_ideal_range:"Rango ideal", imc_peso_ideal:"Peso ideal",
+    imc_kcal_atual:"Calorías actuales", imc_kcal_ideal:"Calorías para IMC ideal",
+    empty_imc:"Ingrese peso, altura y edad",
+    disclaimer_imc:"El IMC es una estimativa poblacional — no reemplaza la evaluación clínica individualizada. Calorías calculadas con la ecuación de Mifflin-St Jeor.",
     dil_med_label:"Medicamento", dil_dose_label:"Dosis prescrita", dil_conc_label:"Concentración del frasco",
     dil_vol_label:"Volumen del diluyente", dil_tempo_label:"Tiempo de infusión",
     dil_conc_final:"Conc. final", velocidade:"Velocidad", vol_total:"Vol. total bolsa",
@@ -1365,6 +1482,93 @@ function setVaccFiltro(f){
 function toggleVacc(id){ document.getElementById("vc-"+id).classList.toggle("open"); }
 
 // ══════════════════════════════════════════════════
+// IMC
+// ══════════════════════════════════════════════════
+let imcSex="m", imcFat=1.2;
+
+function setImcSex(s){
+  imcSex=s;
+  document.getElementById("imc-sex-m").classList.toggle("active",s==="m");
+  document.getElementById("imc-sex-f").classList.toggle("active",s==="f");
+  calcIMC();
+}
+function setImcAtiv(el,fat){
+  imcFat=fat;
+  document.querySelectorAll(".imc-ativ-btn").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+  calcIMC();
+}
+
+const IMC_CATS=[
+  {max:16,   label:{pt:"Magreza grave",en:"Severe thinness",es:"Delgadez grave"},   color:"#4A90D9"},
+  {max:17,   label:{pt:"Magreza moderada",en:"Moderate thinness",es:"Delgadez moderada"},color:"#5BA8E0"},
+  {max:18.5, label:{pt:"Magreza leve",en:"Mild thinness",es:"Delgadez leve"},        color:"#6DC0E8"},
+  {max:24.9, label:{pt:"Peso normal",en:"Normal weight",es:"Peso normal"},            color:"#4CC17A"},
+  {max:29.9, label:{pt:"Sobrepeso",en:"Overweight",es:"Sobrepeso"},                  color:"#F0C040"},
+  {max:34.9, label:{pt:"Obesidade grau I",en:"Obesity class I",es:"Obesidad grado I"},color:"#E07030"},
+  {max:39.9, label:{pt:"Obesidade grau II",en:"Obesity class II",es:"Obesidad grado II"},color:"#C03020"},
+  {max:999,  label:{pt:"Obesidade grau III",en:"Obesity class III",es:"Obesidad grado III"},color:"#800010"},
+];
+
+function getImcCat(imc){ return IMC_CATS.find(c=>imc<=c.max)||IMC_CATS[IMC_CATS.length-1]; }
+
+function calcIMC(){
+  const peso=parseFloat(document.getElementById("imc-peso").value);
+  const altCm=parseFloat(document.getElementById("imc-alt").value);
+  const idade=parseFloat(document.getElementById("imc-idade").value);
+  const empty=document.getElementById("imc-empty");
+  const result=document.getElementById("imc-result");
+  if(isNaN(peso)||isNaN(altCm)||isNaN(idade)||peso<=0||altCm<=0||idade<=0){
+    empty.style.display=""; result.style.display="none"; return;
+  }
+  const altM=altCm/100;
+  const imc=peso/(altM*altM);
+  const cat=getImcCat(imc);
+
+  // Gauge pin position (IMC range 14–45 → 0–100%)
+  const pct=Math.min(100,Math.max(0,(imc-14)/(45-14)*100));
+  document.getElementById("imc-pin").style.left=pct+"%";
+
+  // Badge
+  const badge=document.getElementById("imc-cat-badge");
+  badge.textContent=cat.label[lang]||cat.label.pt;
+  badge.style.background=cat.color+"22";
+  badge.style.color=cat.color;
+  badge.style.border=`1px solid ${cat.color}55`;
+
+  document.getElementById("imc-val").textContent=imc.toLocaleString("pt-BR",{maximumFractionDigits:1});
+
+  // Faixa ideal por sexo
+  const idealMin=18.5, idealMax=imcSex==="f"?23.5:24.9;
+  document.getElementById("imc-ideal-range").textContent=`${idealMin} – ${idealMax}`;
+
+  // Peso ideal
+  const piMin=(idealMin*altM*altM).toFixed(1);
+  const piMax=(idealMax*altM*altM).toFixed(1);
+  document.getElementById("imc-peso-ideal").textContent=`${piMin} – ${piMax}`;
+
+  // BMR Mifflin-St Jeor
+  const bmr=imcSex==="m"
+    ?(10*peso)+(6.25*altCm)-(5*idade)+5
+    :(10*peso)+(6.25*altCm)-(5*idade)-161;
+  const tdee=Math.round(bmr*imcFat);
+  document.getElementById("imc-kcal-atual").textContent=tdee.toLocaleString("pt-BR");
+
+  // Calorias para IMC ideal (range)
+  const bmrIdMin=imcSex==="m"
+    ?(10*parseFloat(piMin))+(6.25*altCm)-(5*idade)+5
+    :(10*parseFloat(piMin))+(6.25*altCm)-(5*idade)-161;
+  const bmrIdMax=imcSex==="m"
+    ?(10*parseFloat(piMax))+(6.25*altCm)-(5*idade)+5
+    :(10*parseFloat(piMax))+(6.25*altCm)-(5*idade)-161;
+  const tdeeIdMin=Math.round(bmrIdMin*imcFat);
+  const tdeeIdMax=Math.round(bmrIdMax*imcFat);
+  document.getElementById("imc-kcal-ideal").textContent=`${tdeeIdMin.toLocaleString("pt-BR")} – ${tdeeIdMax.toLocaleString("pt-BR")}`;
+
+  empty.style.display="none"; result.style.display="";
+}
+
+// ══════════════════════════════════════════════════
 // DILUIÇÃO IV
 // ══════════════════════════════════════════════════
 const MEDS_DIL = {
@@ -1492,7 +1696,7 @@ function calcDil(){
 // ══════════════════════════════════════════════════
 // TABS + TEMA
 // ══════════════════════════════════════════════════
-function setTab(t){ ["dil","dose","conv","vacc"].forEach(id=>{ document.getElementById("tab-"+id).classList.toggle("active",id===t); document.getElementById("panel-"+id).classList.toggle("active",id===t); }); }
+function setTab(t){ ["dil","imc","dose","conv","vacc"].forEach(id=>{ document.getElementById("tab-"+id).classList.toggle("active",id===t); document.getElementById("panel-"+id).classList.toggle("active",id===t); }); }
 function toggleTheme(){ const r=document.documentElement,c=r.getAttribute("data-theme"); if(c==="dark"){r.setAttribute("data-theme","light");document.getElementById("ti").textContent="☾";}else if(c==="light"){r.removeAttribute("data-theme");document.getElementById("ti").textContent="◑";}else{r.setAttribute("data-theme","dark");document.getElementById("ti").textContent="☀";} }
 
 // ══════════════════════════════════════════════════
