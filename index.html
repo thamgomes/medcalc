@@ -110,6 +110,21 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .tog-btn{background:var(--surface2);border:1.5px solid var(--border);border-radius:7px;color:var(--muted);font-family:var(--sans);font-size:12px;font-weight:500;padding:7px 12px;cursor:pointer;transition:all .13s}
 .tog-btn.active{background:var(--accent-g);border-color:var(--accent-b);color:var(--accent)}
 
+/* Dose resultado novo */
+.dose-main-card{background:linear-gradient(135deg,var(--accent-g),transparent 80%);border:1px solid var(--accent-b);border-radius:14px;padding:18px 20px 16px;margin-bottom:12px}
+.dose-main-lbl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);opacity:.65;margin-bottom:10px}
+.dose-mg-row{display:flex;align-items:baseline;gap:7px;margin-bottom:6px}
+.dose-mg-num{font-family:var(--mono);font-size:38px;font-weight:500;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.dose-mg-un{font-size:16px;color:var(--accent);opacity:.7;font-weight:500}
+.dose-vol-row{font-family:var(--mono);font-size:14px;color:var(--accent);opacity:.8;margin-bottom:14px;min-height:18px}
+.dose-freq-pill{display:inline-flex;background:var(--surface2);border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:12px;font-weight:500;padding:5px 14px}
+.dose-variants{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.dose-var-btn{background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--muted);cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;font-family:var(--sans);font-size:12px;text-align:left;transition:all .13s;gap:8px;width:100%}
+.dose-var-btn:hover,.dose-var-btn.active{background:var(--accent-g);border-color:var(--accent-b);color:var(--accent)}
+.dvb-label{font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+.dvb-val{font-family:var(--mono);font-size:12px;font-weight:500;text-align:right}
+.d-maxwarn{background:var(--warn-g);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);border-radius:8px;padding:8px 13px;font-size:12px;color:var(--warn);margin-bottom:10px;display:none}
+
 /* Strip */
 .strip{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 13px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;margin-bottom:10px}
 .strip-label{color:var(--muted)}.strip-val{font-family:var(--mono);font-weight:500;color:var(--text);font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
@@ -447,33 +462,36 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
     <div class="fl" data-i18n="peso_label">Peso do paciente</div>
     <div class="peso-wrap"><input type="number" id="peso" placeholder="0" min="0.5" max="200" step="0.1" oninput="calcDose()"><span class="peso-kg">kg</span></div>
   </div>
-  <div class="field">
-    <div class="fl" data-i18n="med_label">Medicamento</div>
-    <div class="sel-wrap"><select id="med" onchange="onMedChange()"></select><span class="sel-arr"><svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path class="arr" d="M1 1l5 5 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-  </div>
-  <div class="field">
-    <div class="fl" data-i18n="form_label">Formulação</div>
-    <div class="sel-wrap"><select id="form" onchange="calcDose()"></select><span class="sel-arr"><svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path class="arr" d="M1 1l5 5 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-  </div>
-  <div id="slider-row" style="display:none;margin-bottom:14px">
-    <div class="fl" id="slider-lbl">Dose</div>
-    <div class="slider-row"><input type="range" id="d-slider" oninput="onSlider()"><span class="slider-val" id="d-disp">—</span></div>
-  </div>
-  <div id="freq-row" style="display:none;margin-bottom:14px">
-    <div class="fl" data-i18n="freq_label">Frequência</div>
-    <div class="toggles" id="freq-toggles"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+    <div>
+      <div class="fl" data-i18n="med_label" style="margin-bottom:6px">Medicamento</div>
+      <div class="sel-wrap"><select id="med" onchange="onMedChange()"></select><span class="sel-arr"><svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path class="arr" d="M1 1l5 5 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    </div>
+    <div>
+      <div class="fl" data-i18n="form_label" style="margin-bottom:6px">Formulação</div>
+      <div class="sel-wrap"><select id="form" onchange="calcDose()"></select><span class="sel-arr"><svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path class="arr" d="M1 1l5 5 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    </div>
   </div>
   <div class="warn-box" id="d-warn"></div>
   <div id="d-empty" class="empty-state" data-i18n="empty_dose">Informe o peso e selecione o medicamento</div>
   <div id="d-result" style="display:none">
-    <div class="res-grid">
-      <div class="res-cell" id="dc-mg"><div class="rc-lbl" data-i18n="por_dose">Por dose</div><div class="rc-val" id="dr-mg">—</div><div class="rc-un">mg</div></div>
-      <div class="res-cell" id="dc-ml"><div class="rc-lbl" id="dc-ml-lbl" data-i18n="volume">Volume</div><div class="rc-val" id="dr-ml">—</div><div class="rc-un" id="dc-ml-un">mL</div></div>
-      <div class="res-cell" id="dc-gt"><div class="rc-lbl" data-i18n="gotas">Gotas</div><div class="rc-val" id="dr-gt">—</div><div class="rc-un" data-i18n="gts">gts</div></div>
+    <!-- Card principal: dose padrão -->
+    <div class="dose-main-card">
+      <div class="dose-main-lbl" id="dr-dose-rate">Dose padrão</div>
+      <div class="dose-mg-row">
+        <span class="dose-mg-num" id="dr-mg">—</span>
+        <span class="dose-mg-un">mg</span>
+      </div>
+      <div class="dose-vol-row" id="dr-vol-row">—</div>
+      <div class="dose-freq-pill" id="dr-freq">—</div>
     </div>
-    <div class="strip"><span class="strip-label" data-i18n="r_freq">Frequência</span><span class="strip-val" id="dr-freq">—</span></div>
+    <!-- Variantes clicáveis (mín / máx) -->
+    <div class="dose-variants" id="d-variants"></div>
+    <!-- Aviso de dose máxima atingida -->
+    <div class="d-maxwarn" id="d-maxwarn"></div>
+    <!-- Strips inferiores -->
     <div class="strip"><span class="strip-label" data-i18n="total_dia">Total / dia</span><span class="strip-val" id="dr-dia">—</span></div>
-    <div class="strip" id="dr-maxrow" style="display:none"><span class="strip-label" data-i18n="max_dose">⚠ Máx. por dose</span><span class="strip-val" id="dr-max">—</span></div>
+    <div class="strip" id="dr-dur-row" style="display:none"><span class="strip-label" data-i18n="duracao_label">Duração sugerida</span><span class="strip-val" id="dr-dur">—</span></div>
   </div>
   <hr><div class="disclaimer"><span data-i18n="disclaimer_dose">Referência clínica — confirme com o prescritor. Peso, idade e indicação alteram a conduta.</span></div>
 </div>
@@ -582,6 +600,8 @@ const T = {
     obrigat:"Obrigatória", recom:"Recomendada",
     vacc_disc:"Calendário PNI 2024 (Programa Nacional de Imunizações / MS). Calendários estaduais e de grupos de risco podem incluir vacinas adicionais.",
     footer_ideal:"Idealização: Andrea L F M Gomes",
+    dose_padrao:"Dose padrão", dose_min:"Dose mínima", dose_max:"Dose máxima",
+    duracao_label:"Duração sugerida", dose_max_ating:"⚠ Dose limitada ao máximo de",
     grp_analg:"Analgésicos / Antitérmicos", grp_antib:"Antibióticos",
     grp_horm:"Hormônios e análogos", grp_anticoag:"Anticoagulantes", grp_vit:"Vitaminas",
     comp:"comprimido", comps:"comprimidos",
@@ -606,6 +626,8 @@ const T = {
     obrigat:"Required", recom:"Recommended",
     vacc_disc:"PNI 2024 Schedule (Brazilian National Immunization Program). State and risk-group schedules may include additional vaccines.",
     footer_ideal:"Concept by: Andrea L F M Gomes",
+    dose_padrao:"Standard dose", dose_min:"Min dose", dose_max:"Max dose",
+    duracao_label:"Suggested duration", dose_max_ating:"⚠ Dose capped at",
     grp_analg:"Analgesics / Antipyretics", grp_antib:"Antibiotics",
     grp_horm:"Hormones & analogues", grp_anticoag:"Anticoagulants", grp_vit:"Vitamins",
     comp:"tablet", comps:"tablets",
@@ -630,6 +652,8 @@ const T = {
     obrigat:"Obligatoria", recom:"Recomendada",
     vacc_disc:"Calendario PNI 2024 (Programa Nacional de Inmunizaciones, Brasil). Los calendarios estatales y de grupos de riesgo pueden incluir vacunas adicionales.",
     footer_ideal:"Idealización: Andrea L F M Gomes",
+    dose_padrao:"Dosis estándar", dose_min:"Dosis mínima", dose_max:"Dosis máxima",
+    duracao_label:"Duración sugerida", dose_max_ating:"⚠ Dosis limitada al máximo de",
     grp_analg:"Analgésicos / Antipiréticos", grp_antib:"Antibióticos",
     grp_horm:"Hormonas y análogos", grp_anticoag:"Anticoagulantes", grp_vit:"Vitaminas",
     comp:"comprimido", comps:"comprimidos",
@@ -714,7 +738,7 @@ const MEDS = {
     ],
   },
   amoxicilina:{
-    tipo:"antib",doseMin:25,doseMax:50,doseDefault:40,
+    tipo:"antib",doseMin:25,doseMax:50,doseDefault:40,duracao:{pt:"7–10 dias",en:"7–10 days",es:"7–10 días"},
     freqOpts:{pt:["a cada 8h (3×/dia)","a cada 12h (2×/dia)"],en:["every 8h (3×/day)","every 12h (2×/day)"],es:["cada 8h (3×/día)","cada 12h (2×/día)"]},
     freqDiv:[3,2],freqDef:0,maxDia:3000,pesoMin:2,restricao:null,
     nome:{pt:"Amoxicilina",en:"Amoxicillin",es:"Amoxicilina"},
@@ -725,7 +749,7 @@ const MEDS = {
     ],
   },
   amoxiclav:{
-    tipo:"antib",doseMin:45,doseMax:90,doseDefault:45,
+    tipo:"antib",doseMin:45,doseMax:90,doseDefault:45,duracao:{pt:"7–10 dias",en:"7–10 days",es:"7–10 días"},
     freqOpts:{pt:["a cada 12h (2×/dia)","a cada 8h (3×/dia)"],en:["every 12h (2×/day)","every 8h (3×/day)"],es:["cada 12h (2×/día)","cada 8h (3×/día)"]},
     freqDiv:[2,3],freqDef:0,maxDia:4000,pesoMin:2,
     restricao:{pt:"Dose refere-se à amoxicilina. Clavulanato máx 10 mg/kg/dia — preferir 400/57 mg.",en:"Dose refers to amoxicillin component. Clavulanate max 10 mg/kg/day — prefer 400/57 mg formulation.",es:"Dosis refiere a amoxicilina. Clavulanato máx 10 mg/kg/día — preferir 400/57 mg."},
@@ -737,7 +761,7 @@ const MEDS = {
     ],
   },
   azitromicina:{
-    tipo:"antib",doseMin:10,doseMax:10,doseDefault:10,
+    tipo:"antib",doseMin:10,doseMax:10,doseDefault:10,duracao:{pt:"3–5 dias",en:"3–5 days",es:"3–5 días"},
     freqOpts:{pt:["1×/dia × 3 dias","1×/dia × 5 dias"],en:["1×/day × 3 days","1×/day × 5 days"],es:["1×/día × 3 días","1×/día × 5 días"]},
     freqDiv:[1,1],freqDef:0,maxDia:500,pesoMin:2,restricao:null,
     nome:{pt:"Azitromicina",en:"Azithromycin",es:"Azitromicina"},
@@ -747,7 +771,7 @@ const MEDS = {
     ],
   },
   claritromicina:{
-    tipo:"antib",doseMin:15,doseMax:15,doseDefault:15,
+    tipo:"antib",doseMin:15,doseMax:15,doseDefault:15,duracao:{pt:"7–14 dias",en:"7–14 days",es:"7–14 días"},
     freqOpts:{pt:["a cada 12h (2×/dia)"],en:["every 12h (2×/day)"],es:["cada 12h (2×/día)"]},
     freqDiv:[2],freqDef:0,maxDia:1000,pesoMin:2,restricao:null,
     nome:{pt:"Claritromicina",en:"Clarithromycin",es:"Claritromicina"},
@@ -758,7 +782,7 @@ const MEDS = {
     ],
   },
   cefalexina:{
-    tipo:"antib",doseMin:25,doseMax:50,doseDefault:40,
+    tipo:"antib",doseMin:25,doseMax:50,doseDefault:40,duracao:{pt:"7–10 dias",en:"7–10 days",es:"7–10 días"},
     freqOpts:{pt:["a cada 6h (4×/dia)","a cada 8h (3×/dia)","a cada 12h (2×/dia)"],en:["every 6h (4×/day)","every 8h (3×/day)","every 12h (2×/day)"],es:["cada 6h (4×/día)","cada 8h (3×/día)","cada 12h (2×/día)"]},
     freqDiv:[4,3,2],freqDef:0,maxDia:4000,pesoMin:2,restricao:null,
     nome:{pt:"Cefalexina",en:"Cefalexin",es:"Cefalexina"},
@@ -768,7 +792,7 @@ const MEDS = {
     ],
   },
   smztmp:{
-    tipo:"antib",doseMin:8,doseMax:10,doseDefault:8,
+    tipo:"antib",doseMin:8,doseMax:10,doseDefault:8,duracao:{pt:"7–14 dias",en:"7–14 days",es:"7–14 días"},
     freqOpts:{pt:["a cada 12h (2×/dia)"],en:["every 12h (2×/day)"],es:["cada 12h (2×/día)"]},
     freqDiv:[2],freqDef:0,maxDia:320,pesoMin:2,
     restricao:{pt:"Dose pelo componente trimetoprima (TMP). Não usar em < 2 meses nem em IR grave.",en:"Dose by trimethoprim (TMP) component. Do not use in < 2 months or severe renal failure.",es:"Dosis por componente trimetoprima (TMP). No usar en < 2 meses ni en IR grave."},
@@ -780,7 +804,7 @@ const MEDS = {
     ],
   },
   metronidazol:{
-    tipo:"antib",doseMin:20,doseMax:40,doseDefault:30,
+    tipo:"antib",doseMin:20,doseMax:40,doseDefault:30,duracao:{pt:"7–10 dias",en:"7–10 days",es:"7–10 días"},
     freqOpts:{pt:["a cada 8h (3×/dia)","a cada 12h (2×/dia)"],en:["every 8h (3×/day)","every 12h (2×/day)"],es:["cada 8h (3×/día)","cada 12h (2×/día)"]},
     freqDiv:[3,2],freqDef:0,maxDia:2000,pesoMin:2,
     restricao:{pt:"Evitar no 1º trimestre de gestação. Não usar com álcool.",en:"Avoid in 1st trimester of pregnancy. Do not use with alcohol.",es:"Evitar en el 1er trimestre de gestación. No usar con alcohol."},
@@ -792,7 +816,7 @@ const MEDS = {
     ],
   },
   doxiciclina:{
-    tipo:"antib",doseMin:2,doseMax:4,doseDefault:3,
+    tipo:"antib",doseMin:2,doseMax:4,doseDefault:3,duracao:{pt:"7–14 dias",en:"7–14 days",es:"7–14 días"},
     freqOpts:{pt:["1×/dia","a cada 12h (2×/dia)"],en:["1×/day","every 12h (2×/day)"],es:["1×/día","cada 12h (2×/día)"]},
     freqDiv:[1,2],freqDef:0,maxDia:200,pesoMin:25,
     restricao:{pt:"Contraindicada em < 8 anos e gestantes — deposita em ossos e dentes.",en:"Contraindicated in < 8 years and pregnancy — deposits in bones and teeth.",es:"Contraindicada en < 8 años y embarazadas — se deposita en huesos y dientes."},
@@ -802,7 +826,7 @@ const MEDS = {
     ],
   },
   ciprofloxacino:{
-    tipo:"antib",doseMin:20,doseMax:30,doseDefault:20,
+    tipo:"antib",doseMin:20,doseMax:30,doseDefault:20,duracao:{pt:"7–14 dias",en:"7–14 days",es:"7–14 días"},
     freqOpts:{pt:["a cada 12h (2×/dia)"],en:["every 12h (2×/day)"],es:["cada 12h (2×/día)"]},
     freqDiv:[2],freqDef:0,maxDia:1500,pesoMin:40,
     restricao:{pt:"Uso em < 18 anos restrito a indicações específicas (ITU, fibrose cística). Risco de artropatia.",en:"Use in < 18 years restricted to specific indications (UTI, cystic fibrosis). Risk of arthropathy.",es:"Uso en < 18 años restringido a indicaciones específicas (ITU, fibrosis quística). Riesgo de artropatía."},
@@ -813,7 +837,7 @@ const MEDS = {
     ],
   },
   nitrofurantoina:{
-    tipo:"antib",doseMin:5,doseMax:7,doseDefault:5,
+    tipo:"antib",doseMin:5,doseMax:7,doseDefault:5,duracao:{pt:"5–7 dias",en:"5–7 days",es:"5–7 días"},
     freqOpts:{pt:["a cada 6h (4×/dia)"],en:["every 6h (4×/day)"],es:["cada 6h (4×/día)"]},
     freqDiv:[4],freqDef:0,maxDia:400,pesoMin:12,
     restricao:{pt:"Exclusivo para ITU baixa. Não usar em < 3 meses, IR grave ou próximo ao parto.",en:"For lower UTI only. Do not use in < 3 months, severe renal failure, or near term.",es:"Solo para ITU baja. No usar en < 3 meses, IR grave o cerca del parto."},
@@ -825,7 +849,7 @@ const MEDS = {
   },
 };
 
-let dFreqIdx=0, dDoseAtual=0;
+let dDoseAtual = 0;
 const MED_KEYS = Object.keys(MEDS);
 
 function buildMedSelect() {
@@ -847,67 +871,87 @@ function getForm(){
 
 function onMedChange(){
   const m=getMed();
-  dFreqIdx=m.freqDef; dDoseAtual=m.doseDefault;
+  dDoseAtual=m.doseDefault;
   const fs=document.getElementById("form");
   const curF=fs.value;
   fs.innerHTML=m.forms.map(f=>`<option value="${f.id}">${f.nome[lang]||f.nome.pt}</option>`).join("");
   if([...fs.options].some(o=>o.value===curF)) fs.value=curF;
-  const sr=document.getElementById("slider-row"),sl=document.getElementById("d-slider");
-  if(m.doseMin!==m.doseMax){
-    sr.style.display="";sl.min=m.doseMin;sl.max=m.doseMax;sl.value=m.doseDefault;
-    document.getElementById("slider-lbl").textContent=m.tipo==="antib"?t("dose_por_dia"):t("dose_por_dose");
-    updSlider();
-  } else { sr.style.display="none"; dDoseAtual=m.doseDefault; }
-  const fr=document.getElementById("freq-row"),fg=document.getElementById("freq-toggles");
-  const opts=m.freqOpts[lang]||m.freqOpts.pt;
-  if(opts.length>1){
-    fr.style.display="";
-    fg.innerHTML=opts.map((f,i)=>`<button class="tog-btn ${i===dFreqIdx?"active":""}" onclick="setFreqD(${i})">${f}</button>`).join("");
-  } else fr.style.display="none";
-  calcDose();
-}
-
-function onSlider(){ dDoseAtual=parseFloat(document.getElementById("d-slider").value); updSlider(); calcDose(); }
-function updSlider(){
-  const m=getMed(); const un=m.tipo==="antib"?t("dose_por_dia"):t("dose_por_dose");
-  document.getElementById("d-disp").textContent=`${dDoseAtual} ${un.split("(")[0].trim().split(" ").pop()}`;
-  document.getElementById("d-disp").textContent=`${dDoseAtual} ${m.tipo==="antib"?"mg/kg/dia":"mg/kg/dose"}`;
-}
-function setFreqD(i){
-  dFreqIdx=i;
-  document.querySelectorAll("#freq-toggles .tog-btn").forEach((b,j)=>b.classList.toggle("active",i===j));
-  calcDose();
-}
-
-function calcDose(){
-  const m=getMed(), f=getForm();
-  const peso=parseFloat(document.getElementById("peso").value);
   const wb=document.getElementById("d-warn");
-  if(m.restricao){ const r=m.restricao[lang]||m.restricao.pt||m.restricao; wb.textContent=r; wb.classList.add("show"); }
+  if(m.restricao){const r=m.restricao[lang]||m.restricao.pt;wb.textContent=r;wb.classList.add("show");}
   else wb.classList.remove("show");
-  if(isNaN(peso)||peso<=0){ document.getElementById("d-empty").style.display=""; document.getElementById("d-result").style.display="none"; return; }
-  const nD=m.freqDiv[dFreqIdx];
-  let mgDia,mgDose;
-  if(m.tipo==="antib"){ mgDia=Math.min(peso*dDoseAtual,m.maxDia||Infinity); mgDose=mgDia/nD; }
-  else { mgDose=Math.min(peso*dDoseAtual,m.maxDose||Infinity); mgDia=Math.min(mgDose*nD,m.maxDia||Infinity); }
+  calcDose();
+}
+
+function calcDose(){ renderDoseResult(getMed(), getForm(), parseFloat(document.getElementById("peso").value), dDoseAtual); }
+
+function renderDoseResult(m, f, peso, doseKg){
+  if(isNaN(peso)||peso<=0){
+    document.getElementById("d-empty").style.display="";
+    document.getElementById("d-result").style.display="none";
+    return;
+  }
+  const nD=m.freqDiv[m.freqDef];
+  let mgDia,mgDose,limitado=false;
+  if(m.tipo==="antib"){
+    const raw=peso*doseKg; mgDia=Math.min(raw,m.maxDia||Infinity); if(raw>mgDia)limitado=true; mgDose=mgDia/nD;
+  } else {
+    const raw=peso*doseKg; mgDose=Math.min(raw,m.maxDose||Infinity); if(raw>mgDose)limitado=true;
+    mgDia=Math.min(mgDose*nD,m.maxDia||Infinity);
+  }
   const isComp=f.tipo==="comp";
-  let ml=null,gt=null;
-  if(!isComp){ ml=mgDose/f.mgMl; if(f.gPorMl) gt=ml*f.gPorMl; }
+  let volTxt="";
+  if(!isComp){
+    const ml=mgDose/f.mgMl; volTxt=`→ ${fmtVol(ml)} mL`;
+    if(f.gPorMl) volTxt+=` · ${Math.round(ml*f.gPorMl)} gotas`;
+  } else {
+    const v=mgDose/f.mgComp; volTxt=`→ ${fmtVol(v)} ${v<=1.5?t("comp"):t("comps")}`;
+  }
   document.getElementById("d-empty").style.display="none";
   document.getElementById("d-result").style.display="";
   document.getElementById("dr-mg").textContent=fmtMg(mgDose);
-  const lm=document.getElementById("dc-ml-lbl"), um=document.getElementById("dc-ml-un"), cm=document.getElementById("dc-ml");
-  if(!isComp){ cm.classList.remove("off"); lm.textContent=t("volume"); um.textContent="mL"; document.getElementById("dr-ml").textContent=fmtVol(ml); }
-  else { cm.classList.remove("off"); lm.textContent=t("comp"); um.textContent=t("comp"); document.getElementById("dr-ml").textContent=fmtVol(mgDose/f.mgComp); const v=mgDose/f.mgComp; um.textContent=v<=1.5?t("comp"):t("comps"); }
-  const cg=document.getElementById("dc-gt");
-  if(gt!==null){ cg.classList.remove("off"); document.getElementById("dr-gt").textContent=Math.round(gt); }
-  else { cg.classList.add("off"); document.getElementById("dr-gt").textContent="—"; }
+  document.getElementById("dr-vol-row").textContent=volTxt;
+  const rateLabel=m.tipo==="antib"
+    ?`${t("dose_padrao")} · ${doseKg} mg/kg/dia`
+    :`${t("dose_padrao")} · ${doseKg} mg/kg/dose`;
+  document.getElementById("dr-dose-rate").textContent=rateLabel;
   const opts=m.freqOpts[lang]||m.freqOpts.pt;
-  document.getElementById("dr-freq").textContent=opts[dFreqIdx];
-  document.getElementById("dr-dia").textContent=`${fmtMg(mgDia)} mg`;
-  const mr=document.getElementById("dr-maxrow");
-  if(m.maxDose&&peso*dDoseAtual>m.maxDose*0.85){ mr.style.display=""; document.getElementById("dr-max").textContent=`${m.maxDose} mg`; }
-  else mr.style.display="none";
+  document.getElementById("dr-freq").textContent=opts[m.freqDef];
+  document.getElementById("dr-dia").textContent=`${fmtMg(mgDia)} mg/dia`;
+  const durRow=document.getElementById("dr-dur-row");
+  if(m.duracao){document.getElementById("dr-dur").textContent=m.duracao[lang]||m.duracao.pt;durRow.style.display="";}
+  else durRow.style.display="none";
+  const mw=document.getElementById("d-maxwarn");
+  if(limitado){mw.textContent=`${t("dose_max_ating")} ${m.maxDose||m.maxDia} mg`;mw.style.display="";}
+  else mw.style.display="none";
+  buildVariants(m,f,peso);
+}
+
+function buildVariants(m,f,peso){
+  const container=document.getElementById("d-variants");
+  if(m.doseMin===m.doseMax){container.innerHTML="";return;}
+  const variants=[];
+  if(m.doseMin!==m.doseDefault) variants.push({dose:m.doseMin,label:t("dose_min")});
+  if(m.doseMax!==m.doseDefault) variants.push({dose:m.doseMax,label:t("dose_max")});
+  const nD=m.freqDiv[m.freqDef];
+  container.innerHTML=variants.map(v=>{
+    let mg;
+    if(m.tipo==="antib") mg=Math.min(peso*v.dose,m.maxDia||Infinity)/nD;
+    else mg=Math.min(peso*v.dose,m.maxDose||Infinity);
+    const isComp=f.tipo==="comp";
+    let vol="";
+    if(!isComp){const ml=mg/f.mgMl;vol=`${fmtVol(ml)} mL${f.gPorMl?" · "+Math.round(ml*f.gPorMl)+" gts":""}`;}
+    else{const cv=mg/f.mgComp;vol=`${fmtVol(cv)} ${cv<=1.5?t("comp"):t("comps")}`;}
+    const active=v.dose===dDoseAtual?"active":"";
+    return `<button class="dose-var-btn ${active}" onclick="setDoseVar(${v.dose})">
+      <span class="dvb-label">${v.label} · ${v.dose} mg/kg</span>
+      <span class="dvb-val">${fmtMg(mg)} mg &nbsp;·&nbsp; ${vol}</span>
+    </button>`;
+  }).join("");
+}
+
+function setDoseVar(dose){
+  dDoseAtual=dose;
+  renderDoseResult(getMed(),getForm(),parseFloat(document.getElementById("peso").value),dose);
 }
 
 // ══════════════════════════════════════════════════
