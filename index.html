@@ -771,6 +771,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
         <div class="imc-card-lbl" data-i18n="imc_ideal_range">Faixa ideal</div>
         <div class="imc-card-val" id="imc-ideal-range">—</div>
         <div class="imc-card-un">kg/m²</div>
+        <div class="imc-card-note" id="imc-ideal-note" style="font-size:0.7rem;color:var(--dim);margin-top:4px;font-style:italic"></div>
       </div>
       <div class="imc-card ideal">
         <div class="imc-card-lbl" data-i18n="imc_peso_ideal">Peso ideal</div>
@@ -1538,9 +1539,12 @@ function calcIMC(){
 
   document.getElementById("imc-val").textContent=imc.toLocaleString("pt-BR",{maximumFractionDigits:1});
 
-  // Faixa ideal por sexo
+  // Faixa ideal ajustada por sexo biológico (mulheres: até 23,5 por maior % de gordura no mesmo IMC)
   const idealMin=18.5, idealMax=imcSex==="f"?23.5:24.9;
   document.getElementById("imc-ideal-range").textContent=`${idealMin} – ${idealMax}`;
+  document.getElementById("imc-ideal-note").textContent=imcSex==="f"
+    ?"Faixa ajustada para sexo feminino"
+    :"Faixa ajustada para sexo masculino";
 
   // Peso ideal
   const piMin=(idealMin*altM*altM).toFixed(1);
